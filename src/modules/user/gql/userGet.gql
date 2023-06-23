@@ -1,0 +1,6 @@
+query userGet {
+  userGet {
+    id
+    phoneNumber
+  }
+}
