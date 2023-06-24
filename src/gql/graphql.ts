@@ -72,7 +72,3 @@ export type UserGetQuery = { __typename?: 'Query', userGet: { __typename?: 'User
 
 
 export const UserGetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"userGet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userGet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"phoneNumber"}}]}}]}}]} as unknown as DocumentNode<UserGetQuery, UserGetQueryVariables>;
-export type UserGetQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type UserGetQuery = { __typename?: 'Query', userGet: { __typename?: 'User', id: string, phoneNumber: string } };
