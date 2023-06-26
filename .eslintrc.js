@@ -5,12 +5,15 @@ module.exports = {
     sourceType: "module",
     tsconfigRootDir: "./",
   },
-  plugins: ["@typescript-eslint/eslint-plugin", "prettier"],
+  plugins: ["@typescript-eslint/eslint-plugin", "prettier", "react-hooks"],
   extends: [
+    "@react-native",
+    "plugin:import/typescript",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
     "prettier",
-    "@react-native",
+    "react-hooks",
+    "plugin:react-hooks/recommended",
   ],
   root: true,
   env: {

@@ -1,16 +1,17 @@
 import { NavigationContainer } from "@react-navigation/native";
 import React, { useEffect } from "react";
-import { Text, View } from "react-native";
 
 import { Provider } from "react-redux";
 import { store, persistor } from "./src/store";
 import { PersistGate } from "redux-persist/integration/react";
 import {
   SafeAreaProvider,
-  SafeAreaView,
   initialWindowMetrics,
 } from "react-native-safe-area-context";
 import Orientation from "react-native-orientation-locker";
+import { client } from "./src/apollo/client";
+import { ApolloProvider } from "@apollo/client";
+import { MainStack } from "./src/components/NavigationStack/navigationStack";
 
 function App(): JSX.Element {
   useEffect(() => {
@@ -20,15 +21,13 @@ function App(): JSX.Element {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <NavigationContainer>
-            <SafeAreaView>
-              <View>
-                <Text>hello</Text>
-              </View>
-            </SafeAreaView>
-          </NavigationContainer>
-        </SafeAreaProvider>
+        <ApolloProvider client={client}>
+          <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+            <NavigationContainer>
+              <MainStack />
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </ApolloProvider>
       </PersistGate>
     </Provider>
   );
