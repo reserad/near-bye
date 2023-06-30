@@ -1,45 +1,54 @@
 import React, { useCallback, useState } from "react";
 import { Screen } from "../../../components/Screen/screen";
 import { Keyboard, StyleSheet, Text, View } from "react-native";
+import { Masks, useMaskedInputProps } from "react-native-mask-input";
 import { Theme } from "../../../shared/theme";
 import { TextField } from "../../../components/TextField/textField";
 import { Button } from "../../../components/Button/button";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 
-interface LoginProps {
-  onSubmit(code: string): void;
+interface SendOtpProps {
+  onSubmit(phoneNumber: string): void;
   isLoading: boolean;
 }
 
-export const OtpScreen = (props: LoginProps) => {
+export const SendOtpScreen = (props: SendOtpProps) => {
   const { onSubmit, isLoading = false } = props;
-  const [code, setCode] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const maskedInputProps = useMaskedInputProps({
+    value: phoneNumber,
+    onChangeText: (_masked, unmasked) => {
+      setPhoneNumber(unmasked);
+    },
+    mask: Masks.USA_PHONE,
+    showObfuscatedValue: true,
+  });
 
   const handleOnPress = useCallback(async () => {
     Keyboard.dismiss();
-    onSubmit(code);
-  }, [code]);
+    onSubmit(phoneNumber);
+  }, [phoneNumber]);
 
   return (
-    <Screen scroll showBackButton>
+    <Screen scroll>
       <View style={styles.container}>
         <View style={styles.card}>
-          <Text style={styles.header}>Enter the code:</Text>
+          <Text style={styles.header}>Enter your phone number to begin:</Text>
           <TextField
             badge={faPhone}
-            maxLength={6}
-            keyboardType="number-pad"
+            maxLength={14}
+            keyboardType="phone-pad"
             color={Theme.color.black}
             placeholderTextColor={Theme.color.mediumGray}
-            value={code}
-            onChangeText={value => setCode(value)}
+            {...maskedInputProps}
           />
           <Button
             text="Continue"
             style={styles.submit}
             onPress={handleOnPress}
             loading={isLoading}
-            disabled={code.length !== 6}
+            disabled={phoneNumber.length !== 10}
           />
         </View>
       </View>

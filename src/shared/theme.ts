@@ -6,7 +6,8 @@ export const Theme = {
     mediumGray: "rgb(175,175,175)",
     darkGray: "rgb(75,75,75)",
     purple: "rgb(93,116,222)",
-    purpleDesaturated: "rgb(112,125,181)",
+    prupleDisabled: "rgb(112,125,181)",
+    purpleDesaturated: "rgb(213, 218, 240)",
   },
   padding: {
     P1: 4,
@@ -18,7 +19,7 @@ export const Theme = {
     P7: 28,
     P8: 32,
     P9: 36,
-    p10: 40,
+    P10: 40,
     P11: 44,
     P12: 48,
     P13: 52,

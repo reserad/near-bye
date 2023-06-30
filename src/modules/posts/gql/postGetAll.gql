@@ -1,0 +1,14 @@
+query postGetAll($postGetAllInput: PostGetAllInput!) {
+  postGetAll(postGetAllInput: $postGetAllInput) {
+    id
+    body
+    createdAt
+    author {
+      phoneNumber
+      profile {
+        id
+        profileImage
+      }
+    }
+  }
+}

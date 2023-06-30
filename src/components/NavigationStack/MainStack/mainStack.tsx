@@ -1,9 +1,10 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { FeedContainer } from "../../../modules/feed/feedContainer";
+import { createStackNavigator } from "@react-navigation/stack";
+import { MainStackParamList } from "../../../navigation/types";
 
-export const AuthenticatedStack = () => {
-  const Stack = createNativeStackNavigator();
+export const MainStack = () => {
+  const Stack = createStackNavigator<MainStackParamList>();
   return (
     <Stack.Navigator
       initialRouteName="Feed"

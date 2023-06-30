@@ -68,3 +68,5 @@ ios/NearBye.xcodeproj/project.xcworkspace/
 /coverage
 
 /node_modules
+
+.env

@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import DeviceInfo from "react-native-device-info";
 import thunk from "redux-thunk";
 import persistStore from "redux-persist/es/persistStore";
+import { ActionType } from "./actionType";
 
 const persistConfig: PersistConfig<RootState> = {
   storage: AsyncStorage,
@@ -25,3 +26,8 @@ export const store = configureStore({
 export const persistor = persistStore(store);
 
 export type AppDispatch = typeof store.dispatch;
+
+export interface ReduxAction<P> {
+  type: ActionType;
+  payload?: P;
+}

@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     fontSize: Theme.fontSize.medium,
   },
   disabled: {
-    backgroundColor: Theme.color.purpleDesaturated,
+    backgroundColor: Theme.color.prupleDisabled,
   },
 });

@@ -9,9 +9,8 @@ import {
   initialWindowMetrics,
 } from "react-native-safe-area-context";
 import Orientation from "react-native-orientation-locker";
-import { client } from "./src/apollo/client";
-import { ApolloProvider } from "@apollo/client";
-import { MainStack } from "./src/components/NavigationStack/navigationStack";
+import { NavigationStack } from "./src/components/NavigationStack/navigationStack";
+import { ApolloContainer } from "./src/apollo/apolloContainer";
 
 function App(): JSX.Element {
   useEffect(() => {
@@ -21,13 +20,13 @@ function App(): JSX.Element {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <ApolloProvider client={client}>
+        <ApolloContainer>
           <SafeAreaProvider initialMetrics={initialWindowMetrics}>
             <NavigationContainer>
-              <MainStack />
+              <NavigationStack />
             </NavigationContainer>
           </SafeAreaProvider>
-        </ApolloProvider>
+        </ApolloContainer>
       </PersistGate>
     </Provider>
   );
