@@ -4,9 +4,16 @@ import { login } from "../../store/user/actions/login";
 import { useNewDispatch } from "../../store/hooks/useNewDispatch";
 import { verifyOtp } from "./utils";
 import { VerifyOtpDto } from "./types/verifyOtpDto";
+import { AuthStackProps } from "../../navigation/types";
+import { HttpStatusCode, isAxiosError } from "axios";
+import Toast from "react-native-toast-message";
 
-export const VerifyOtpContainer = ({ route, navigation }) => {
-  const { phoneNumber } = route.params;
+export const VerifyOtpContainer = ({
+  route,
+  navigation,
+}: AuthStackProps<"VerifyOtp">) => {
+  // const { phoneNumber } = route.params;
+  const phoneNumber = "9376710051";
   const dispatch = useNewDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const handleOnPress = useCallback(
@@ -17,9 +24,21 @@ export const VerifyOtpContainer = ({ route, navigation }) => {
           const payload: VerifyOtpDto = { phoneNumber, code };
           const response = await verifyOtp(payload);
           dispatch(login(response));
-          navigation.navigate("Feed");
-          setIsLoading(false);
+          const timeout = setTimeout(() => {
+            navigation.navigate("MainStack", { screen: "Feed" });
+            clearTimeout(timeout);
+          }, 500);
         } catch (err) {
+          if (isAxiosError(err)) {
+            if (err.response.status === HttpStatusCode.NotFound) {
+              Toast.show({
+                type: "error",
+                text1: "Error",
+                text2: "The entered code is not valid",
+              });
+            }
+          }
+        } finally {
           setIsLoading(false);
         }
       }

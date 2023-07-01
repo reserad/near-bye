@@ -31,6 +31,10 @@ export const UserReducer = (
         phoneNumber: payload.user.phoneNumber,
         isAuthenticated: true,
       };
+    case ActionType.USER_SIGN_OUT:
+      return {
+        ...initialState,
+      };
     default:
       return state;
   }

@@ -12,6 +12,7 @@ export type RootStackParamList = {
 
 export type MainStackParamList = {
   Feed: undefined;
+  Account: undefined;
 };
 
 export type AuthStackParamList = {

@@ -1,15 +1,19 @@
 import React from "react";
 import { FeedContainer } from "../../../modules/feed/feedContainer";
-import { createStackNavigator } from "@react-navigation/stack";
 import { MainStackParamList } from "../../../navigation/types";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { AccountContainer } from "../../../modules/account/accountContainer";
 
 export const MainStack = () => {
-  const Stack = createStackNavigator<MainStackParamList>();
+  const Tab = createBottomTabNavigator<MainStackParamList>();
   return (
-    <Stack.Navigator
+    <Tab.Navigator
       initialRouteName="Feed"
-      screenOptions={{ headerShown: false, gestureEnabled: false }}>
-      <Stack.Screen name="Feed" component={FeedContainer} />
-    </Stack.Navigator>
+      screenOptions={{
+        headerShown: false,
+      }}>
+      <Tab.Screen name="Feed" component={FeedContainer} />
+      <Tab.Screen name="Account" component={AccountContainer} />
+    </Tab.Navigator>
   );
 };

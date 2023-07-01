@@ -11,6 +11,7 @@ import {
 import Orientation from "react-native-orientation-locker";
 import { NavigationStack } from "./src/components/NavigationStack/navigationStack";
 import { ApolloContainer } from "./src/apollo/apolloContainer";
+import Toast from "react-native-toast-message";
 
 function App(): JSX.Element {
   useEffect(() => {
@@ -24,6 +25,7 @@ function App(): JSX.Element {
           <SafeAreaProvider initialMetrics={initialWindowMetrics}>
             <NavigationContainer>
               <NavigationStack />
+              <Toast />
             </NavigationContainer>
           </SafeAreaProvider>
         </ApolloContainer>

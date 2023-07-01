@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from "react";
-import { Screen } from "../../../components/Screen/screen";
+import { Screen, ScreenProps } from "../../../components/Screen/screen";
 import { Keyboard, StyleSheet, Text, View } from "react-native";
 import { Theme } from "../../../shared/theme";
 import { TextField } from "../../../components/TextField/textField";
 import { Button } from "../../../components/Button/button";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 
-interface VerifyOtpProps {
+interface VerifyOtpProps extends ScreenProps {
   onSubmit(code: string): void;
   isLoading: boolean;
 }
