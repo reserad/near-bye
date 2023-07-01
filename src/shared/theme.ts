@@ -25,6 +25,7 @@ export const Theme = {
     P13: 52,
     P14: 56,
     P15: 60,
+    P16: 64,
   },
   fontSize: {
     xSmall: 14,

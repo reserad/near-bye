@@ -30,11 +30,10 @@ export const Card = ({ post, onClick }: CardProps) => {
 const styles = StyleSheet.create({
   card: {
     height: 250,
-    padding: Theme.padding.P3,
-    borderRadius: 8,
-    marginBottom: 20,
+    padding: Theme.padding.P4,
+    borderRadius: Theme.padding.P2,
+    marginBottom: Theme.padding.P5,
     backgroundColor: Theme.color.white,
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.3,
     shadowRadius: 2,
@@ -48,9 +47,9 @@ const styles = StyleSheet.create({
   body: {},
   bodyContainer: {
     flex: 1,
-    borderRadius: 8,
+    borderRadius: Theme.padding.P2,
     backgroundColor: Theme.color.purpleDesaturated,
-    padding: Theme.padding.P3,
+    padding: Theme.padding.P4,
   },
   authorPicture: {
     backgroundColor: Theme.color.purple,

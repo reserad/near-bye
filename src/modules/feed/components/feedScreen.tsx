@@ -1,15 +1,10 @@
-import {
-  FlatList,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  ViewProps,
-} from "react-native";
+import { FlatList, RefreshControl, StyleSheet, ViewProps } from "react-native";
 import { Screen } from "../../../components/Screen/screen";
 import { Card } from "./card";
 import { useCallback } from "react";
 import { Theme } from "../../../shared/theme";
 import { Post } from "../../../store/post/types/post";
+import { FAB } from "../../../components/FAB/fab";
 
 interface RenderItem {
   item: Post;
@@ -32,22 +27,25 @@ export const FeedScreen = ({ posts, onRefresh, loading }: FeedScreenProps) => {
     );
   }, []);
   return (
-    <Screen>
-      <FlatList
-        data={posts}
-        renderItem={renderCard}
-        style={styles.list}
-        refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={onRefresh} />
-        }
-      />
-    </Screen>
+    <>
+      <Screen>
+        <FlatList
+          data={posts}
+          renderItem={renderCard}
+          style={styles.list}
+          refreshControl={
+            <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+          }
+        />
+      </Screen>
+      <FAB />
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   list: {
-    padding: Theme.padding.P3,
+    padding: Theme.padding.P4,
     backgroundColor: Theme.color.lightGray,
   },
 });
