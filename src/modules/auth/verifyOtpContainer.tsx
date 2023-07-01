@@ -12,8 +12,7 @@ export const VerifyOtpContainer = ({
   route,
   navigation,
 }: AuthStackProps<"VerifyOtp">) => {
-  // const { phoneNumber } = route.params;
-  const phoneNumber = "9376710051";
+  const { phoneNumber } = route.params;
   const dispatch = useNewDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const handleOnPress = useCallback(
@@ -30,6 +29,7 @@ export const VerifyOtpContainer = ({
           }, 500);
         } catch (err) {
           if (isAxiosError(err)) {
+            console.error(err.message);
             if (err.response.status === HttpStatusCode.NotFound) {
               Toast.show({
                 type: "error",
