@@ -14,7 +14,7 @@ export const AccountContainer = ({ navigation }: MainStackProps<"Account">) => {
   return (
     <Screen scroll>
       <View>
-        <Button text="signout" onPress={handleOnPress} />
+        <Button text="Sign out" onPress={handleOnPress} />
       </View>
     </Screen>
   );

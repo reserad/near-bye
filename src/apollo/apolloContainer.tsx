@@ -6,7 +6,8 @@ import {
   NormalizedCacheObject,
   createHttpLink,
 } from "@apollo/client";
-import { getAuthHeaders } from "../modules/auth/utils";
+import { getAuthToken } from "../modules/auth/utils";
+import { setContext } from "@apollo/client/link/context";
 
 export type ApolloContainerProps = {};
 
@@ -18,17 +19,25 @@ export const ApolloContainer = (
     useState<ApolloClient<NormalizedCacheObject>>(null);
   const hasLoaded = useRef(false);
 
+  const apolloAuthContext = setContext(async (_, { headers }) => {
+    const accessToken = await getAuthToken();
+    return {
+      headers: {
+        ...headers,
+        authorization: accessToken ? `Bearer ${accessToken}` : null,
+      },
+    };
+  });
+
   useEffect(() => {
     const load = async () => {
-      const headers = await getAuthHeaders();
       const httpLink = createHttpLink({
         uri: process.env.REACT_APP_BFF_URL,
-        headers,
       });
 
       setClient(
         new ApolloClient({
-          link: httpLink,
+          link: apolloAuthContext.concat(httpLink),
           cache: new InMemoryCache(),
         }),
       );
@@ -37,7 +46,7 @@ export const ApolloContainer = (
     if (!hasLoaded.current) {
       load();
     }
-  }, [client]);
+  }, [client, apolloAuthContext]);
   return client ? (
     <ApolloProvider client={client}>{children}</ApolloProvider>
   ) : null;

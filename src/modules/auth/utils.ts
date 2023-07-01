@@ -34,21 +34,19 @@ export const sendOtp = async (data: SendOtpDto): Promise<void> => {
   });
 };
 
-export const getAuthHeaders = async () => {
+export const getAuthToken = async () => {
   try {
     const result = await Keychain.getInternetCredentials(
       DeviceInfo.getBundleId(),
     );
     if (result) {
       const { accessToken }: VerifyOtpResponse = JSON.parse(result.password);
-      return {
-        authorization: `Bearer ${accessToken}`,
-      };
+      return accessToken;
     }
   } catch (err) {
     console.error(err);
-    return {};
+    return null;
   }
 
-  return {};
+  return null;
 };
