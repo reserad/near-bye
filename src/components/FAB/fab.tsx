@@ -7,11 +7,13 @@ import { IconProps } from "react-native-vector-icons/Icon";
 export type FABProps = {
   color?: string;
   icon?: IconProps;
+  onPress(): void;
 };
 
 export const FAB = ({
   color = Theme.color.purple,
   icon = { name: "plus", size: 20, color: Theme.color.white },
+  onPress,
 }: FABProps) => {
   const styles = StyleSheet.create({
     button: {
@@ -31,7 +33,10 @@ export const FAB = ({
   });
 
   return (
-    <TouchableOpacity activeOpacity={0.5} style={styles.container}>
+    <TouchableOpacity
+      activeOpacity={0.5}
+      style={styles.container}
+      onPress={onPress}>
       <View style={styles.button}>
         <MaterialCommunityIcons {...icon} />
       </View>

@@ -14,16 +14,26 @@ interface FeedScreenProps extends ViewProps {
   posts: Post[];
   onRefresh(): void;
   loading?: boolean;
+  onFABPress(): void;
 }
 
-export const FeedScreen = ({ posts, onRefresh, loading }: FeedScreenProps) => {
-  const handleOnClick = useCallback((id: string) => {
+export const FeedScreen = ({
+  posts,
+  onRefresh,
+  loading,
+  onFABPress,
+}: FeedScreenProps) => {
+  const handleCardPress = useCallback((id: string) => {
     console.info("Card clicked: ", id);
   }, []);
 
   const renderCard = useCallback(({ item }: RenderItem) => {
     return (
-      <Card key={item.id} post={item} onClick={() => handleOnClick(item.id)} />
+      <Card
+        key={item.id}
+        post={item}
+        onClick={() => handleCardPress(item.id)}
+      />
     );
   }, []);
   return (
@@ -38,7 +48,7 @@ export const FeedScreen = ({ posts, onRefresh, loading }: FeedScreenProps) => {
           }
         />
       </Screen>
-      <FAB />
+      <FAB onPress={onFABPress} />
     </>
   );
 };

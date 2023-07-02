@@ -3,9 +3,11 @@ import { Screen } from "../../components/Screen/screen";
 import { Button } from "../../components/Button/button";
 import { useNewDispatch } from "../../store/hooks/useNewDispatch";
 import { signOut } from "../../store/user/actions/signOut";
-import { MainStackProps } from "../../navigation/types";
+import { BottomTabStackProps } from "../../navigation/types";
 
-export const AccountContainer = ({ navigation }: MainStackProps<"Account">) => {
+export const AccountContainer = ({
+  navigation,
+}: BottomTabStackProps<"Account">) => {
   const dispatch = useNewDispatch();
   const handleOnPress = () => {
     dispatch(signOut());

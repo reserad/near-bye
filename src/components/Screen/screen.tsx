@@ -2,7 +2,6 @@ import React from "react";
 import { RefreshControl, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ViewProps } from "react-native-svg/lib/typescript/fabric/utils";
-import { Theme } from "../../shared/theme";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { NavBar } from "../NavBar/navBar";
 
@@ -49,6 +48,5 @@ export const Screen = (props: ScreenProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Theme.color.white,
   },
 });

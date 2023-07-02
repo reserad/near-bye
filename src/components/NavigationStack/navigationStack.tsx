@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNewSelector } from "../../store/hooks/useNewSelector";
 import { getIsAuthenticated } from "../../modules/auth/selectors/getIsAuthenticated";
 import { MainStack } from "./MainStack/mainStack";
+import { BottomTabStack } from "./BottomTabStack/bottomTabStack";
 
 export const NavigationStack = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -12,14 +13,18 @@ export const NavigationStack = () => {
   return (
     <Stack.Navigator
       id="RootStack"
-      initialRouteName={"MainStack"}
+      initialRouteName={"BottomTabStack"}
       screenOptions={{
         headerShown: false,
         gestureEnabled: false,
+        animation: "slide_from_right",
       }}>
       <Stack.Screen name="AuthStack" component={AuthStack} />
       {isAuthenticated ? (
-        <Stack.Screen name="MainStack" component={MainStack} />
+        <>
+          <Stack.Screen name="BottomTabStack" component={BottomTabStack} />
+          <Stack.Screen name="MainStack" component={MainStack} />
+        </>
       ) : null}
     </Stack.Navigator>
   );
