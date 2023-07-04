@@ -9,6 +9,7 @@ import {
 import { Screen } from "../../../components/Screen/screen";
 import { Theme } from "../../../shared/theme";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { Button } from "../../../components/Button/button";
 
 export type CreatePostProps = {
   onSubmit(payload: CreatePostPayload): void;
@@ -81,22 +82,22 @@ export const CreatePostScreen = ({ onSubmit }: CreatePostProps) => {
               </View>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            activeOpacity={0.6}
-            disabled={!canSubmit}
-            onPress={handleOnSubmit}>
-            <View
-              style={[
-                styles.card,
-                canSubmit ? styles.createCard : styles.createCardDisabled,
-              ]}>
+          <Button
+            icon={
               <MaterialCommunityIcons
                 name="send"
                 color={Theme.color.white}
                 size={28}
               />
-            </View>
-          </TouchableOpacity>
+            }
+            onPress={handleOnSubmit}
+            style={[
+              styles.card,
+              canSubmit ? styles.createCard : styles.createCardDisabled,
+            ]}
+            disabled={!canSubmit}
+            height={Theme.padding.P16}
+          />
         </View>
       </View>
     </Screen>
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
   card: {
     height: Theme.padding.P16,
     width: Theme.padding.P16,
-    borderRadius: Theme.padding.P4,
+    borderRadius: Theme.padding.P8,
     justifyContent: "center",
     alignItems: "center",
   },

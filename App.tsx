@@ -11,7 +11,8 @@ import {
 import Orientation from "react-native-orientation-locker";
 import { NavigationStack } from "./src/components/NavigationStack/navigationStack";
 import { ApolloContainer } from "./src/apollo/apolloContainer";
-import Toast from "react-native-toast-message";
+import { navigationRef } from "./src/navigation/rootNavigation";
+import { RootToast } from "./src/components/RootToast/rootToast";
 
 function App(): JSX.Element {
   useEffect(() => {
@@ -23,9 +24,9 @@ function App(): JSX.Element {
       <PersistGate persistor={persistor}>
         <ApolloContainer>
           <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-            <NavigationContainer>
+            <NavigationContainer ref={navigationRef}>
               <NavigationStack />
-              <Toast />
+              <RootToast />
             </NavigationContainer>
           </SafeAreaProvider>
         </ApolloContainer>

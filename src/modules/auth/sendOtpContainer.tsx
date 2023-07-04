@@ -1,14 +1,15 @@
 import React, { useCallback, useState } from "react";
-import { sendOtp } from "./utils";
 import { SendOtpDto } from "./types/sendOtpDto";
 import { AuthStackProps } from "../../navigation/types";
 import { SendOtpScreen } from "./components/sendOtpScreen";
+import { useSendOtp } from "./hooks/useSendOtp";
 
 export const SendOtpContainer = ({
   route,
   navigation,
 }: AuthStackProps<"SendOtp">) => {
   const [isLoading, setIsLoading] = useState(false);
+  const { sendOtp } = useSendOtp();
   const handleOnPress = useCallback(async (phoneNumber: string) => {
     if (phoneNumber && phoneNumber.length === 10) {
       setIsLoading(true);

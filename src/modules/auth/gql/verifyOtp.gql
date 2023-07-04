@@ -1,0 +1,11 @@
+mutation verifyOtp($otpVerifyInput: OtpVerifyInput!) {
+  verifyOtp(otpVerifyInput: $otpVerifyInput) {
+    accessToken
+    refreshToken
+    tokenId
+    user {
+      id
+      phoneNumber
+    }
+  }
+}

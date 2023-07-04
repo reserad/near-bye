@@ -8,11 +8,11 @@ import { StackScreenProps } from "@react-navigation/stack";
 export type RootStackParamList = {
   AuthStack: NavigatorScreenParams<AuthStackParamList>;
   MainStack: NavigatorScreenParams<MainStackParamList>;
-  BottomTabStack: NavigatorScreenParams<BottomTabStackParamList>;
 };
 
 export type MainStackParamList = {
   CreatePost: undefined;
+  BottomTabs: NavigatorScreenParams<BottomTabStackParamList>;
 };
 
 export type BottomTabStackParamList = {

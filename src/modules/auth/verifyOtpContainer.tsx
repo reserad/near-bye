@@ -2,11 +2,13 @@ import React, { useCallback, useState } from "react";
 import { VerifyOtpScreen } from "./components/verifyOtpScreen";
 import { login } from "../../store/user/actions/login";
 import { useNewDispatch } from "../../store/hooks/useNewDispatch";
-import { verifyOtp } from "./utils";
 import { VerifyOtpDto } from "./types/verifyOtpDto";
 import { AuthStackProps } from "../../navigation/types";
-import { HttpStatusCode, isAxiosError } from "axios";
+import { HttpStatusCode } from "axios";
 import Toast from "react-native-toast-message";
+import { useVerifyOtp } from "./hooks/useVerifyOtp";
+import { isApolloError } from "../../shared/utils/isApolloError";
+import { getStatusCodeOfApolloError } from "../../shared/utils/getStatusCodeOfApolloError";
 
 export const VerifyOtpContainer = ({
   route,
@@ -15,6 +17,7 @@ export const VerifyOtpContainer = ({
   const { phoneNumber } = route.params;
   const dispatch = useNewDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const { verifyOtp } = useVerifyOtp();
   const handleOnPress = useCallback(
     async (code: string) => {
       if (code && code.length === 6) {
@@ -24,13 +27,12 @@ export const VerifyOtpContainer = ({
           const response = await verifyOtp(payload);
           dispatch(login(response));
           const timeout = setTimeout(() => {
-            navigation.navigate("MainStack", { screen: "Feed" });
+            navigation.navigate("MainStack", { screen: "BottomTabs" });
             clearTimeout(timeout);
           }, 500);
         } catch (err) {
-          if (isAxiosError(err)) {
-            console.error(err.message);
-            if (err.response.status === HttpStatusCode.NotFound) {
+          if (isApolloError(err)) {
+            if (getStatusCodeOfApolloError(err) === HttpStatusCode.NotFound) {
               Toast.show({
                 type: "error",
                 text1: "Error",

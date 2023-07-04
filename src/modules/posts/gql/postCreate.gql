@@ -1,0 +1,14 @@
+mutation postCreate($postCreateInput: PostCreateInput!) {
+  postCreate(postCreateInput: $postCreateInput) {
+    id
+    body
+    createdAt
+    author {
+      phoneNumber
+      profile {
+        id
+        profileImage
+      }
+    }
+  }
+}

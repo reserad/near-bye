@@ -1,0 +1,5 @@
+mutation sendOtp($otpSendInput: OtpSendInput!) {
+  sendOtp(otpSendInput: $otpSendInput) {
+    success
+  }
+}
