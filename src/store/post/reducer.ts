@@ -19,7 +19,7 @@ export const PostReducer = (
     case ActionType.ADD_USER_POST:
       return {
         ...state,
-        feed: state.feed.concat(action.payload),
+        feed: [action.payload].concat(state.feed),
       };
     default:
       return state;

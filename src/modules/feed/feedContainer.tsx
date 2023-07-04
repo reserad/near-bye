@@ -24,9 +24,9 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
     setLoading(false);
   }, [getAllPosts, setLoading, dispatch, setUserPosts]);
 
-  const handleFABPress = () => {
+  const handleFABPress = useCallback(() => {
     navigation.navigate("MainStack", { screen: "CreatePost" });
-  };
+  }, [navigation]);
 
   return (
     <FeedScreen
