@@ -12,10 +12,14 @@ export const PostReducer = (
 ): PostState => {
   switch (action.type) {
     case ActionType.SET_USER_POSTS:
-      const payload = action.payload;
       return {
         ...state,
-        feed: payload,
+        feed: action.payload,
+      };
+    case ActionType.ADD_USER_POST:
+      return {
+        ...state,
+        feed: state.feed.concat(action.payload),
       };
     default:
       return state;

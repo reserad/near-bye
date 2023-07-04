@@ -11,6 +11,7 @@ export const NavigationStack = () => {
   const isAuthenticated = useNewSelector(getIsAuthenticated);
   return (
     <Stack.Navigator
+      initialRouteName="MainStack"
       screenOptions={{
         headerShown: false,
         gestureEnabled: false,

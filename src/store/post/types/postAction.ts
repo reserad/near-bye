@@ -1,3 +1,4 @@
-import { GetUserPostsAction } from "./setUserPostsAction";
+import { AddNewlyCreatedPostAction } from "./addNewlyCreatedPostAction";
+import { SetUserPostsAction } from "./setUserPostsAction";
 
-export type PostAction = GetUserPostsAction;
+export type PostAction = SetUserPostsAction | AddNewlyCreatedPostAction;

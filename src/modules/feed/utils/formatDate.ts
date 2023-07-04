@@ -16,7 +16,7 @@ export const formatDate = (original: string) => {
   } else if (minuteDiff > 60) {
     return `${hourDiff}h`;
   } else if (minuteDiff < 60 && secondDiff >= 60) {
-    return `${hourDiff}m`;
+    return `${minuteDiff}m`;
   } else {
     return `${secondDiff}s`;
   }
