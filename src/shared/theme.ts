@@ -8,6 +8,7 @@ export const Theme = {
     purple: "rgb(93,116,222)",
     prupleDisabled: "rgb(112,125,181)",
     purpleDesaturated: "rgb(213, 218, 240)",
+    red: "rgb(222,93,93)",
   },
   padding: {
     P1: 4,

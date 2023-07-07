@@ -6,12 +6,13 @@ import { useNewDispatch } from "../../store/hooks/useNewDispatch";
 import { useNewSelector } from "../../store/hooks/useNewSelector";
 import { getUserFeed } from "./selectors/getUserFeed";
 import { setFeed } from "../../store/feed/actions/setFeed";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
 
 export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useNewDispatch();
   const { getFeed } = useGetFeed();
-  const feed = useNewSelector(getUserFeed);
+  const userFeed = useNewSelector(getUserFeed);
   const [offset, setOffset] = useState<number>(0);
 
   useEffect(() => {
@@ -20,10 +21,20 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
 
   const fetchFeed = useCallback(async () => {
     setLoading(true);
-    const feed = await getFeed({ offset });
-    dispatch(setFeed(feed));
-    setLoading(false);
-  }, [getFeed, setLoading, dispatch, setFeed]);
+    try {
+      const feed = await getFeed({ offset });
+      dispatch(setFeed(feed));
+      setOffset(feed.length);
+    } catch (err) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Something went wrong",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [getFeed, setLoading, dispatch, setFeed, setOffset]);
 
   const handleFABPress = useCallback(() => {
     navigation.navigate("MainStack", { screen: "CreatePost" });
@@ -31,7 +42,7 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
 
   return (
     <FeedScreen
-      feed={feed}
+      feed={userFeed}
       onRefresh={fetchFeed}
       loading={loading}
       onFABPress={handleFABPress}

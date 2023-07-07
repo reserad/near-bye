@@ -46,6 +46,8 @@ export const FeedScreen = ({
           refreshControl={
             <RefreshControl refreshing={loading} onRefresh={onRefresh} />
           }
+          onEndReached={onRefresh}
+          onEndReachedThreshold={0.2}
         />
       </Screen>
       <FAB onPress={onFABPress} />

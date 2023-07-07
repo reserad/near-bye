@@ -2,6 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Theme } from "../../../shared/theme";
 import { formatDate } from "../utils/formatDate";
 import { FeedItem } from "../../../store/feed/types/feed";
+import { VoteButton, VoteButtonType } from "./voteButton";
 
 export type CardProps = {
   item: FeedItem;
@@ -9,22 +10,34 @@ export type CardProps = {
 };
 
 export const Card = ({ item, onClick }: CardProps) => {
-  const { id, body, upvotes, downvotes, authorImage, authorName, createdAt } =
+  const { body, upvotes, downvotes, authorName, createdAt, userVoteStatus } =
     item;
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={onClick}>
       <View style={styles.card}>
         <View style={styles.header}>
           <View style={styles.authorPicture}></View>
-          {/* <Text>{author.phoneNumber}</Text> */}
+          <Text>{authorName}</Text>
           <Text> . {formatDate(createdAt)}</Text>
         </View>
 
         <View style={styles.bodyContainer}>
           <Text style={styles.body}>{body}</Text>
         </View>
-        <View>
-          <Text style={styles.body}>{}</Text>
+        <View style={styles.footer}>
+          <VoteButton
+            type={VoteButtonType.UP}
+            status={userVoteStatus}
+            onPress={null}
+          />
+          <View style={styles.scoreContainer}>
+            <Text>{upvotes - downvotes}</Text>
+          </View>
+          <VoteButton
+            type={VoteButtonType.DOWN}
+            status={userVoteStatus}
+            onPress={null}
+          />
         </View>
       </View>
     </TouchableOpacity>
@@ -67,5 +80,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: Theme.padding.P3,
     alignItems: "center",
+  },
+  footer: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginVertical: Theme.padding.P2,
+  },
+  upvoteButton: {
+    marginRight: Theme.padding.P2,
+  },
+  scoreContainer: {
+    marginHorizontal: Theme.padding.P2,
   },
 });
