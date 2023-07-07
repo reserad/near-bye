@@ -6,7 +6,7 @@ import {
 } from "./components/createPostScreen";
 import { useCreatePost } from "./hooks/useCreatePost";
 import { useNewDispatch } from "../../store/hooks/useNewDispatch";
-import { addNewlyCreatedPost } from "../../store/post/actions/addNewlyCreatedPost";
+import { addNewlyCreatedPost } from "../../store/feed/actions/addNewlyCreatedPost";
 
 export const CreatePostContainer = ({
   navigation,

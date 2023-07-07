@@ -3,22 +3,22 @@ import { Screen } from "../../../components/Screen/screen";
 import { Card } from "./card";
 import { useCallback } from "react";
 import { Theme } from "../../../shared/theme";
-import { Post } from "../../../store/post/types/post";
 import { FAB } from "../../../components/FAB/fab";
+import { FeedItem } from "../../../store/feed/types/feed";
 
 interface RenderItem {
-  item: Post;
+  item: FeedItem;
 }
 
 interface FeedScreenProps extends ViewProps {
-  posts: Post[];
+  feed: FeedItem[];
   onRefresh(): void;
   loading?: boolean;
   onFABPress(): void;
 }
 
 export const FeedScreen = ({
-  posts,
+  feed,
   onRefresh,
   loading,
   onFABPress,
@@ -31,7 +31,7 @@ export const FeedScreen = ({
     return (
       <Card
         key={item.id}
-        post={item}
+        item={item}
         onClick={() => handleCardPress(item.id)}
       />
     );
@@ -40,7 +40,7 @@ export const FeedScreen = ({
     <>
       <Screen>
         <FlatList
-          data={posts}
+          data={feed}
           renderItem={renderCard}
           style={styles.list}
           refreshControl={

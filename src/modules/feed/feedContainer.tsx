@@ -1,28 +1,29 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { FeedScreen } from "./components/feedScreen";
 import { BottomTabStackProps } from "../../navigation/types";
-import { useGetAllPosts } from "../posts/hooks/useGetAllPosts";
+import { useGetFeed } from "./hooks/useGetFeed";
 import { useNewDispatch } from "../../store/hooks/useNewDispatch";
-import { setUserPosts } from "../../store/post/actions/setUserPosts";
 import { useNewSelector } from "../../store/hooks/useNewSelector";
-import { getUserPosts } from "./selectors/getUserPosts";
+import { getUserFeed } from "./selectors/getUserFeed";
+import { setFeed } from "../../store/feed/actions/setFeed";
 
 export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useNewDispatch();
-  const { getAllPosts } = useGetAllPosts();
-  const posts = useNewSelector(getUserPosts);
+  const { getFeed } = useGetFeed();
+  const feed = useNewSelector(getUserFeed);
+  const [offset, setOffset] = useState<number>(0);
 
   useEffect(() => {
-    fetchPosts();
+    fetchFeed();
   }, []);
 
-  const fetchPosts = useCallback(async () => {
+  const fetchFeed = useCallback(async () => {
     setLoading(true);
-    const posts = await getAllPosts();
-    dispatch(setUserPosts(posts));
+    const feed = await getFeed({ offset });
+    dispatch(setFeed(feed));
     setLoading(false);
-  }, [getAllPosts, setLoading, dispatch, setUserPosts]);
+  }, [getFeed, setLoading, dispatch, setFeed]);
 
   const handleFABPress = useCallback(() => {
     navigation.navigate("MainStack", { screen: "CreatePost" });
@@ -30,8 +31,8 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
 
   return (
     <FeedScreen
-      posts={posts}
-      onRefresh={fetchPosts}
+      feed={feed}
+      onRefresh={fetchFeed}
       loading={loading}
       onFABPress={handleFABPress}
     />

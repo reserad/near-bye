@@ -21,7 +21,7 @@ export const useVerifyOtp = () => {
           },
         });
         if (errors) {
-          console.log(errors);
+          console.error(errors);
           throw errors;
         }
         console.info("VerifyOtp mutation succeeded");

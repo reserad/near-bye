@@ -1,6 +1,8 @@
 query userGet {
   userGet {
     id
-    phoneNumber
+    name
+    createdAt
+    profileImage
   }
 }

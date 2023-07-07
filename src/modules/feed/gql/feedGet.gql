@@ -1,0 +1,13 @@
+query feedGet($feedGetInput: FeedGetInput!) {
+  feedGet(feedGetInput: $feedGetInput) {
+    id
+    body
+    createdAt
+    upvotes
+    downvotes
+    userVoteStatus
+    authorId
+    authorName
+    authorImage
+  }
+}

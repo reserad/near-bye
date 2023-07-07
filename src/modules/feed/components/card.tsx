@@ -1,26 +1,30 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Theme } from "../../../shared/theme";
-import { Post } from "../../../store/post/types/post";
 import { formatDate } from "../utils/formatDate";
+import { FeedItem } from "../../../store/feed/types/feed";
 
 export type CardProps = {
-  post: Post;
+  item: FeedItem;
   onClick(): void;
 };
 
-export const Card = ({ post, onClick }: CardProps) => {
-  const { id, body, author, createdAt } = post;
+export const Card = ({ item, onClick }: CardProps) => {
+  const { id, body, upvotes, downvotes, authorImage, authorName, createdAt } =
+    item;
   return (
     <TouchableOpacity activeOpacity={0.5} onPress={onClick}>
       <View style={styles.card}>
         <View style={styles.header}>
           <View style={styles.authorPicture}></View>
-          <Text>{author.phoneNumber}</Text>
+          {/* <Text>{author.phoneNumber}</Text> */}
           <Text> . {formatDate(createdAt)}</Text>
         </View>
 
         <View style={styles.bodyContainer}>
           <Text style={styles.body}>{body}</Text>
+        </View>
+        <View>
+          <Text style={styles.body}>{}</Text>
         </View>
       </View>
     </TouchableOpacity>

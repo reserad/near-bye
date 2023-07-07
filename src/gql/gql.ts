@@ -15,9 +15,9 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "mutation sendOtp($otpSendInput: OtpSendInput!) {\n  sendOtp(otpSendInput: $otpSendInput) {\n    success\n  }\n}": types.SendOtpDocument,
     "mutation verifyOtp($otpVerifyInput: OtpVerifyInput!) {\n  verifyOtp(otpVerifyInput: $otpVerifyInput) {\n    accessToken\n    refreshToken\n    tokenId\n    user {\n      id\n      phoneNumber\n    }\n  }\n}": types.VerifyOtpDocument,
-    "mutation postCreate($postCreateInput: PostCreateInput!) {\n  postCreate(postCreateInput: $postCreateInput) {\n    id\n    body\n    createdAt\n    author {\n      phoneNumber\n      profile {\n        id\n        profileImage\n      }\n    }\n  }\n}": types.PostCreateDocument,
-    "query postGetAll($postGetAllInput: PostGetAllInput!) {\n  postGetAll(postGetAllInput: $postGetAllInput) {\n    id\n    body\n    createdAt\n    author {\n      phoneNumber\n      profile {\n        id\n        profileImage\n      }\n    }\n  }\n}": types.PostGetAllDocument,
-    "query userGet {\n  userGet {\n    id\n    phoneNumber\n  }\n}": types.UserGetDocument,
+    "query feedGet($feedGetInput: FeedGetInput!) {\n  feedGet(feedGetInput: $feedGetInput) {\n    id\n    body\n    createdAt\n    upvotes\n    downvotes\n    userVoteStatus\n    authorId\n    authorName\n    authorImage\n  }\n}": types.FeedGetDocument,
+    "mutation postCreate($postCreateInput: PostCreateInput!) {\n  postCreate(postCreateInput: $postCreateInput) {\n    id\n    body\n    createdAt\n    latitude\n    longitude\n    author {\n      id\n      profileImage\n    }\n    votes {\n      id\n      postId\n      upvoted\n      downvoted\n    }\n  }\n}": types.PostCreateDocument,
+    "query userGet {\n  userGet {\n    id\n    name\n    createdAt\n    profileImage\n  }\n}": types.UserGetDocument,
 };
 
 /**
@@ -45,15 +45,15 @@ export function graphql(source: "mutation verifyOtp($otpVerifyInput: OtpVerifyIn
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "mutation postCreate($postCreateInput: PostCreateInput!) {\n  postCreate(postCreateInput: $postCreateInput) {\n    id\n    body\n    createdAt\n    author {\n      phoneNumber\n      profile {\n        id\n        profileImage\n      }\n    }\n  }\n}"): (typeof documents)["mutation postCreate($postCreateInput: PostCreateInput!) {\n  postCreate(postCreateInput: $postCreateInput) {\n    id\n    body\n    createdAt\n    author {\n      phoneNumber\n      profile {\n        id\n        profileImage\n      }\n    }\n  }\n}"];
+export function graphql(source: "query feedGet($feedGetInput: FeedGetInput!) {\n  feedGet(feedGetInput: $feedGetInput) {\n    id\n    body\n    createdAt\n    upvotes\n    downvotes\n    userVoteStatus\n    authorId\n    authorName\n    authorImage\n  }\n}"): (typeof documents)["query feedGet($feedGetInput: FeedGetInput!) {\n  feedGet(feedGetInput: $feedGetInput) {\n    id\n    body\n    createdAt\n    upvotes\n    downvotes\n    userVoteStatus\n    authorId\n    authorName\n    authorImage\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query postGetAll($postGetAllInput: PostGetAllInput!) {\n  postGetAll(postGetAllInput: $postGetAllInput) {\n    id\n    body\n    createdAt\n    author {\n      phoneNumber\n      profile {\n        id\n        profileImage\n      }\n    }\n  }\n}"): (typeof documents)["query postGetAll($postGetAllInput: PostGetAllInput!) {\n  postGetAll(postGetAllInput: $postGetAllInput) {\n    id\n    body\n    createdAt\n    author {\n      phoneNumber\n      profile {\n        id\n        profileImage\n      }\n    }\n  }\n}"];
+export function graphql(source: "mutation postCreate($postCreateInput: PostCreateInput!) {\n  postCreate(postCreateInput: $postCreateInput) {\n    id\n    body\n    createdAt\n    latitude\n    longitude\n    author {\n      id\n      profileImage\n    }\n    votes {\n      id\n      postId\n      upvoted\n      downvoted\n    }\n  }\n}"): (typeof documents)["mutation postCreate($postCreateInput: PostCreateInput!) {\n  postCreate(postCreateInput: $postCreateInput) {\n    id\n    body\n    createdAt\n    latitude\n    longitude\n    author {\n      id\n      profileImage\n    }\n    votes {\n      id\n      postId\n      upvoted\n      downvoted\n    }\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query userGet {\n  userGet {\n    id\n    phoneNumber\n  }\n}"): (typeof documents)["query userGet {\n  userGet {\n    id\n    phoneNumber\n  }\n}"];
+export function graphql(source: "query userGet {\n  userGet {\n    id\n    name\n    createdAt\n    profileImage\n  }\n}"): (typeof documents)["query userGet {\n  userGet {\n    id\n    name\n    createdAt\n    profileImage\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

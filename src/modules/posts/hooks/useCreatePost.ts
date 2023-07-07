@@ -16,7 +16,6 @@ export const useCreatePost = () => {
       try {
         const { body } = payload;
         const { latitude, longitude } = await getCoordinates();
-        console.log({ body, userId, latitude, longitude });
         const { data, errors } = await client.mutate({
           mutation: PostCreateDocument,
           variables: {

@@ -3,12 +3,17 @@ mutation postCreate($postCreateInput: PostCreateInput!) {
     id
     body
     createdAt
+    latitude
+    longitude
     author {
-      phoneNumber
-      profile {
-        id
-        profileImage
-      }
+      id
+      profileImage
+    }
+    votes {
+      id
+      postId
+      upvoted
+      downvoted
     }
   }
 }

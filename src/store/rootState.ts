@@ -1,7 +1,7 @@
-import { PostState } from "./post/postState";
+import { FeedState } from "./feed/feedState";
 import { UserState } from "./user/userState";
 
 export interface RootState {
   user: UserState;
-  posts: PostState;
+  userFeed: FeedState;
 }

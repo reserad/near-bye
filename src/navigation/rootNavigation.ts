@@ -13,7 +13,6 @@ export const navigate = (name: string, params?: object) => {
 export const resetNavigationRoot = (path: keyof RootStackParamList) => {
   if (navigationRef.isReady()) {
     navigate(path);
-    console.log();
     navigationRef.current.dispatch(
       CommonActions.reset({
         index: 0,
