@@ -16,7 +16,8 @@ const documents = {
     "mutation sendOtp($otpSendInput: OtpSendInput!) {\n  sendOtp(otpSendInput: $otpSendInput) {\n    success\n  }\n}": types.SendOtpDocument,
     "mutation verifyOtp($otpVerifyInput: OtpVerifyInput!) {\n  verifyOtp(otpVerifyInput: $otpVerifyInput) {\n    accessToken\n    refreshToken\n    tokenId\n    user {\n      id\n      phoneNumber\n    }\n  }\n}": types.VerifyOtpDocument,
     "query feedGet($feedGetInput: FeedGetInput!) {\n  feedGet(feedGetInput: $feedGetInput) {\n    id\n    body\n    createdAt\n    upvotes\n    downvotes\n    userVoteStatus\n    authorId\n    authorName\n    authorImage\n  }\n}": types.FeedGetDocument,
-    "mutation postCreate($postCreateInput: PostCreateInput!) {\n  postCreate(postCreateInput: $postCreateInput) {\n    id\n    body\n    createdAt\n    latitude\n    longitude\n    author {\n      id\n      profileImage\n    }\n    votes {\n      id\n      postId\n      upvoted\n      downvoted\n    }\n  }\n}": types.PostCreateDocument,
+    "mutation postCreate($postCreateInput: PostCreateInput!) {\n  postCreate(postCreateInput: $postCreateInput) {\n    id\n    body\n    createdAt\n    latitude\n    longitude\n    author {\n      id\n      profileImage\n    }\n  }\n}": types.PostCreateDocument,
+    "mutation postVote($postVoteInput: PostVoteInput!) {\n  postVote(postVoteInput: $postVoteInput) {\n    success\n  }\n}": types.PostVoteDocument,
     "query userGet {\n  userGet {\n    id\n    name\n    createdAt\n    profileImage\n  }\n}": types.UserGetDocument,
 };
 
@@ -49,7 +50,11 @@ export function graphql(source: "query feedGet($feedGetInput: FeedGetInput!) {\n
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "mutation postCreate($postCreateInput: PostCreateInput!) {\n  postCreate(postCreateInput: $postCreateInput) {\n    id\n    body\n    createdAt\n    latitude\n    longitude\n    author {\n      id\n      profileImage\n    }\n    votes {\n      id\n      postId\n      upvoted\n      downvoted\n    }\n  }\n}"): (typeof documents)["mutation postCreate($postCreateInput: PostCreateInput!) {\n  postCreate(postCreateInput: $postCreateInput) {\n    id\n    body\n    createdAt\n    latitude\n    longitude\n    author {\n      id\n      profileImage\n    }\n    votes {\n      id\n      postId\n      upvoted\n      downvoted\n    }\n  }\n}"];
+export function graphql(source: "mutation postCreate($postCreateInput: PostCreateInput!) {\n  postCreate(postCreateInput: $postCreateInput) {\n    id\n    body\n    createdAt\n    latitude\n    longitude\n    author {\n      id\n      profileImage\n    }\n  }\n}"): (typeof documents)["mutation postCreate($postCreateInput: PostCreateInput!) {\n  postCreate(postCreateInput: $postCreateInput) {\n    id\n    body\n    createdAt\n    latitude\n    longitude\n    author {\n      id\n      profileImage\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation postVote($postVoteInput: PostVoteInput!) {\n  postVote(postVoteInput: $postVoteInput) {\n    success\n  }\n}"): (typeof documents)["mutation postVote($postVoteInput: PostVoteInput!) {\n  postVote(postVoteInput: $postVoteInput) {\n    success\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

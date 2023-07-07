@@ -9,11 +9,5 @@ mutation postCreate($postCreateInput: PostCreateInput!) {
       id
       profileImage
     }
-    votes {
-      id
-      postId
-      upvoted
-      downvoted
-    }
   }
 }

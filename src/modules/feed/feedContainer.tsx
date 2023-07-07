@@ -7,11 +7,15 @@ import { useNewSelector } from "../../store/hooks/useNewSelector";
 import { getUserFeed } from "./selectors/getUserFeed";
 import { setFeed } from "../../store/feed/actions/setFeed";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { useVotePost } from "../posts/hooks/useUpvotePost";
+import { VotePayload } from "./components/card";
+import { updatePostAfterVoting } from "../../store/feed/actions/updatePostAfterVoting";
 
 export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useNewDispatch();
   const { getFeed } = useGetFeed();
+  const { votePost } = useVotePost();
   const userFeed = useNewSelector(getUserFeed);
   const [offset, setOffset] = useState<number>(0);
 
@@ -24,7 +28,6 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
     try {
       const feed = await getFeed({ offset });
       dispatch(setFeed(feed));
-      setOffset(feed.length);
     } catch (err) {
       Toast.show({
         type: "error",
@@ -34,11 +37,28 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
     } finally {
       setLoading(false);
     }
-  }, [getFeed, setLoading, dispatch, setFeed, setOffset]);
+  }, [getFeed, setLoading, dispatch, setFeed]);
 
   const handleFABPress = useCallback(() => {
     navigation.navigate("MainStack", { screen: "CreatePost" });
   }, [navigation]);
+
+  const handleCardPress = useCallback((id: string) => {
+    console.info("Card clicked: ", id);
+  }, []);
+
+  const handleVote = useCallback(async (payload: VotePayload) => {
+    try {
+      await votePost(payload);
+      dispatch(updatePostAfterVoting(payload));
+    } catch (err) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Something went wrong",
+      });
+    }
+  }, []);
 
   return (
     <FeedScreen
@@ -46,6 +66,8 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
       onRefresh={fetchFeed}
       loading={loading}
       onFABPress={handleFABPress}
+      onCardPress={handleCardPress}
+      onVote={handleVote}
     />
   );
 };

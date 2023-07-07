@@ -21,6 +21,11 @@ export type EmptyAuthPayload = {
   success: Scalars['Boolean']['output'];
 };
 
+export type EmptyVoteResponse = {
+  __typename?: 'EmptyVoteResponse';
+  success: Scalars['Boolean']['output'];
+};
+
 export type FeedGetInput = {
   latitude: Scalars['Float']['input'];
   longitude: Scalars['Float']['input'];
@@ -44,6 +49,7 @@ export type FeedItem = {
 export type Mutation = {
   __typename?: 'Mutation';
   postCreate: Post;
+  postVote: EmptyVoteResponse;
   sendOtp: EmptyAuthPayload;
   verifyOtp: OtpVerifyResult;
 };
@@ -51,6 +57,11 @@ export type Mutation = {
 
 export type MutationPostCreateArgs = {
   postCreateInput: PostCreateInput;
+};
+
+
+export type MutationPostVoteArgs = {
+  postVoteInput: PostVoteInput;
 };
 
 
@@ -104,6 +115,11 @@ export type PostCreateInput = {
   userId: Scalars['String']['input'];
 };
 
+export type PostVoteInput = {
+  postId: Scalars['String']['input'];
+  type: VoteType;
+};
+
 export type Query = {
   __typename?: 'Query';
   feedGet: Array<FeedItem>;
@@ -125,16 +141,7 @@ export type User = {
   phoneNumber: Scalars['String']['output'];
   posts: Array<Post>;
   profileImage?: Maybe<Scalars['String']['output']>;
-  userVotes?: Maybe<Array<UserVote>>;
-};
-
-export type UserVote = {
-  __typename?: 'UserVote';
-  author: User;
-  authorId: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  vote: Vote;
-  voteId: Scalars['String']['output'];
+  votes: Array<Vote>;
 };
 
 export type Vote = {
@@ -143,14 +150,20 @@ export type Vote = {
   id: Scalars['String']['output'];
   postId: Scalars['String']['output'];
   upvoted?: Maybe<Scalars['Boolean']['output']>;
-  userVote: UserVote;
+  userId: Scalars['String']['output'];
 };
 
-/** Type of vote */
+/** If the user voted on the post what is the state? */
 export enum VoteStatus {
   Downvoted = 'DOWNVOTED',
   Neither = 'NEITHER',
   Upvoted = 'UPVOTED'
+}
+
+/** Type of vote */
+export enum VoteType {
+  Downvote = 'DOWNVOTE',
+  Upvote = 'UPVOTE'
 }
 
 export type SendOtpMutationVariables = Exact<{
@@ -179,7 +192,14 @@ export type PostCreateMutationVariables = Exact<{
 }>;
 
 
-export type PostCreateMutation = { __typename?: 'Mutation', postCreate: { __typename?: 'Post', id: string, body: string, createdAt: string, latitude?: number | null, longitude?: number | null, author: { __typename?: 'User', id: string, profileImage?: string | null }, votes: Array<{ __typename?: 'Vote', id: string, postId: string, upvoted?: boolean | null, downvoted?: boolean | null }> } };
+export type PostCreateMutation = { __typename?: 'Mutation', postCreate: { __typename?: 'Post', id: string, body: string, createdAt: string, latitude?: number | null, longitude?: number | null, author: { __typename?: 'User', id: string, profileImage?: string | null } } };
+
+export type PostVoteMutationVariables = Exact<{
+  postVoteInput: PostVoteInput;
+}>;
+
+
+export type PostVoteMutation = { __typename?: 'Mutation', postVote: { __typename?: 'EmptyVoteResponse', success: boolean } };
 
 export type UserGetQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -190,5 +210,6 @@ export type UserGetQuery = { __typename?: 'Query', userGet: { __typename?: 'User
 export const SendOtpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"sendOtp"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"otpSendInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"OtpSendInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sendOtp"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"otpSendInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"otpSendInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}}]}}]}}]} as unknown as DocumentNode<SendOtpMutation, SendOtpMutationVariables>;
 export const VerifyOtpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"verifyOtp"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"otpVerifyInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"OtpVerifyInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verifyOtp"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"otpVerifyInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"otpVerifyInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}},{"kind":"Field","name":{"kind":"Name","value":"tokenId"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"phoneNumber"}}]}}]}}]}}]} as unknown as DocumentNode<VerifyOtpMutation, VerifyOtpMutationVariables>;
 export const FeedGetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"feedGet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"feedGetInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"FeedGetInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"feedGet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"feedGetInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"feedGetInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"upvotes"}},{"kind":"Field","name":{"kind":"Name","value":"downvotes"}},{"kind":"Field","name":{"kind":"Name","value":"userVoteStatus"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"authorName"}},{"kind":"Field","name":{"kind":"Name","value":"authorImage"}}]}}]}}]} as unknown as DocumentNode<FeedGetQuery, FeedGetQueryVariables>;
-export const PostCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"postCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postCreateInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PostCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"postCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"postCreateInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postCreateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"latitude"}},{"kind":"Field","name":{"kind":"Name","value":"longitude"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"profileImage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"votes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"postId"}},{"kind":"Field","name":{"kind":"Name","value":"upvoted"}},{"kind":"Field","name":{"kind":"Name","value":"downvoted"}}]}}]}}]}}]} as unknown as DocumentNode<PostCreateMutation, PostCreateMutationVariables>;
+export const PostCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"postCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postCreateInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PostCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"postCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"postCreateInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postCreateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"latitude"}},{"kind":"Field","name":{"kind":"Name","value":"longitude"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"profileImage"}}]}}]}}]}}]} as unknown as DocumentNode<PostCreateMutation, PostCreateMutationVariables>;
+export const PostVoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"postVote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postVoteInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PostVoteInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"postVote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"postVoteInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postVoteInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}}]}}]}}]} as unknown as DocumentNode<PostVoteMutation, PostVoteMutationVariables>;
 export const UserGetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"userGet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userGet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"profileImage"}}]}}]}}]} as unknown as DocumentNode<UserGetQuery, UserGetQueryVariables>;

@@ -1,0 +1,5 @@
+mutation postVote($postVoteInput: PostVoteInput!) {
+  postVote(postVoteInput: $postVoteInput) {
+    success
+  }
+}

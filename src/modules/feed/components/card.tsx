@@ -3,13 +3,20 @@ import { Theme } from "../../../shared/theme";
 import { formatDate } from "../utils/formatDate";
 import { FeedItem } from "../../../store/feed/types/feed";
 import { VoteButton, VoteButtonType } from "./voteButton";
+import { VoteType } from "../../../gql/graphql";
 
 export type CardProps = {
   item: FeedItem;
   onClick(): void;
+  onVote(payload: VotePayload): void;
 };
 
-export const Card = ({ item, onClick }: CardProps) => {
+export type VotePayload = {
+  postId: string;
+  voteType: VoteType;
+};
+
+export const Card = ({ item, onClick, onVote }: CardProps) => {
   const { body, upvotes, downvotes, authorName, createdAt, userVoteStatus } =
     item;
   return (
@@ -28,7 +35,9 @@ export const Card = ({ item, onClick }: CardProps) => {
           <VoteButton
             type={VoteButtonType.UP}
             status={userVoteStatus}
-            onPress={null}
+            onPress={() =>
+              onVote({ postId: item.id, voteType: VoteType.Upvote })
+            }
           />
           <View style={styles.scoreContainer}>
             <Text>{upvotes - downvotes}</Text>
@@ -36,7 +45,9 @@ export const Card = ({ item, onClick }: CardProps) => {
           <VoteButton
             type={VoteButtonType.DOWN}
             status={userVoteStatus}
-            onPress={null}
+            onPress={() =>
+              onVote({ postId: item.id, voteType: VoteType.Downvote })
+            }
           />
         </View>
       </View>
@@ -91,5 +102,8 @@ const styles = StyleSheet.create({
   },
   scoreContainer: {
     marginHorizontal: Theme.padding.P2,
+    width: Theme.padding.P10,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

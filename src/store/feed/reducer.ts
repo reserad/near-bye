@@ -1,4 +1,4 @@
-import { VoteStatus } from "../../gql/graphql";
+import { VoteStatus, VoteType } from "../../gql/graphql";
 import { RootAction } from "../action";
 import { ActionType } from "../actionType";
 import { FeedState } from "./feedState";
@@ -33,6 +33,66 @@ export const FeedReducer = (
       return {
         ...state,
         feed: [newFeedItem].concat(state.feed),
+      };
+    case ActionType.VOTE_POST:
+      const { postId, voteType } = action.payload;
+      const newFeed = state.feed.map(item => {
+        if (item.id === postId) {
+          switch (voteType) {
+            case VoteType.Upvote: {
+              if (item.userVoteStatus === VoteStatus.Upvoted) {
+                return {
+                  ...item,
+                  userVoteStatus: VoteStatus.Neither,
+                  upvotes: item.upvotes - 1,
+                };
+              } else if (item.userVoteStatus === VoteStatus.Downvoted) {
+                return {
+                  ...item,
+                  userVoteStatus: VoteStatus.Upvoted,
+                  downvotes: item.downvotes - 1,
+                  upvotes: item.upvotes + 1,
+                };
+              } else {
+                return {
+                  ...item,
+                  userVoteStatus: VoteStatus.Upvoted,
+                  upvotes: item.upvotes + 1,
+                };
+              }
+            }
+            case VoteType.Downvote: {
+              if (item.userVoteStatus === VoteStatus.Downvoted) {
+                return {
+                  ...item,
+                  userVoteStatus: VoteStatus.Neither,
+                  downvotes: item.downvotes - 1,
+                };
+              } else if (item.userVoteStatus === VoteStatus.Upvoted) {
+                return {
+                  ...item,
+                  userVoteStatus: VoteStatus.Downvoted,
+                  downvotes: item.downvotes + 1,
+                  upvotes: item.upvotes - 1,
+                };
+              } else {
+                return {
+                  ...item,
+                  userVoteStatus: VoteStatus.Downvoted,
+                  downvotes: item.downvotes + 1,
+                };
+              }
+            }
+            default: {
+              return { ...item, userVoteStatus: VoteStatus.Neither };
+            }
+          }
+        }
+        return item;
+      });
+      return {
+        ...state,
+        feed: newFeed,
       };
     default:
       return state;

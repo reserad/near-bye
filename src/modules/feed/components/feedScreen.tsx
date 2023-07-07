@@ -1,6 +1,6 @@
 import { FlatList, RefreshControl, StyleSheet, ViewProps } from "react-native";
 import { Screen } from "../../../components/Screen/screen";
-import { Card } from "./card";
+import { Card, VotePayload } from "./card";
 import { useCallback } from "react";
 import { Theme } from "../../../shared/theme";
 import { FAB } from "../../../components/FAB/fab";
@@ -15,6 +15,8 @@ interface FeedScreenProps extends ViewProps {
   onRefresh(): void;
   loading?: boolean;
   onFABPress(): void;
+  onVote(payload: VotePayload): void;
+  onCardPress(id: string): void;
 }
 
 export const FeedScreen = ({
@@ -22,17 +24,16 @@ export const FeedScreen = ({
   onRefresh,
   loading,
   onFABPress,
+  onCardPress,
+  onVote,
 }: FeedScreenProps) => {
-  const handleCardPress = useCallback((id: string) => {
-    console.info("Card clicked: ", id);
-  }, []);
-
   const renderCard = useCallback(({ item }: RenderItem) => {
     return (
       <Card
         key={item.id}
         item={item}
-        onClick={() => handleCardPress(item.id)}
+        onClick={() => onCardPress(item.id)}
+        onVote={onVote}
       />
     );
   }, []);
