@@ -7,23 +7,18 @@ import { createShimmerPlaceholder } from "react-native-shimmer-placeholder";
 export const ShimmerCard = () => {
   const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
   return (
-    <View style={styles.cardContainer}>
-      <View style={styles.card}>
-        <View style={styles.header}>
-          <ShimmerPlaceholder shimmerStyle={styles.authorPicture} />
-          <ShimmerPlaceholder shimmerStyle={styles.authorAndDate} width={300} />
-        </View>
-        <ShimmerPlaceholder shimmerStyle={styles.bodyContainer} width={300} />
-        <ShimmerPlaceholder shimmerStyle={styles.footer} />
+    <View style={styles.card}>
+      <View style={styles.header}>
+        <ShimmerPlaceholder shimmerStyle={styles.authorPicture} />
+        <ShimmerPlaceholder shimmerStyle={styles.authorAndDate} width={300} />
       </View>
+      <ShimmerPlaceholder shimmerStyle={styles.bodyContainer} width={300} />
+      <ShimmerPlaceholder shimmerStyle={styles.footer} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  cardContainer: {
-    padding: Theme.padding.P4,
-  },
   card: {
     height: 250,
     padding: Theme.padding.P4,

@@ -52,7 +52,11 @@ export const FeedScreen = ({
     <>
       <Screen>
         {showShimmer ? (
-          <ShimmerCard />
+          <View style={styles.shimmerContainer}>
+            <ShimmerCard />
+            <ShimmerCard />
+            <ShimmerCard />
+          </View>
         ) : (
           <FlatList
             data={feed}
@@ -75,5 +79,8 @@ const styles = StyleSheet.create({
   list: {
     padding: Theme.padding.P4,
     backgroundColor: Theme.color.lightGray,
+  },
+  shimmerContainer: {
+    padding: Theme.padding.P4,
   },
 });
