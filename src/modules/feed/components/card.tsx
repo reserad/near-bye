@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
   footer: {
     alignItems: "center",
     flexDirection: "row",
-    marginVertical: Theme.padding.P2,
+    marginTop: Theme.padding.P2,
   },
   upvoteButton: {
     marginRight: Theme.padding.P2,

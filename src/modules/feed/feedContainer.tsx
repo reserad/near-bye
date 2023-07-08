@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FeedScreen } from "./components/feedScreen";
 import { BottomTabStackProps } from "../../navigation/types";
 import { useGetFeed } from "./hooks/useGetFeed";
@@ -18,6 +18,8 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
   const { votePost } = useVotePost();
   const userFeed = useNewSelector(getUserFeed);
   const [offset, setOffset] = useState<number>(0);
+  const [hasCompletedFirstLoad, setHasCompletedFirstLoad] =
+    useState<boolean>(false);
 
   useEffect(() => {
     fetchFeed();
@@ -35,6 +37,12 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
         text2: "Something went wrong",
       });
     } finally {
+      if (!hasCompletedFirstLoad) {
+        const timeout = setTimeout(() => {
+          setHasCompletedFirstLoad(true);
+          clearTimeout(timeout);
+        }, 500);
+      }
       setLoading(false);
     }
   }, [getFeed, setLoading, dispatch, setFeed]);
@@ -68,6 +76,7 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
       onFABPress={handleFABPress}
       onCardPress={handleCardPress}
       onVote={handleVote}
+      showShimmer={!hasCompletedFirstLoad}
     />
   );
 };

@@ -1,10 +1,19 @@
-import { FlatList, RefreshControl, StyleSheet, ViewProps } from "react-native";
+import {
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  View,
+  ViewProps,
+} from "react-native";
 import { Screen } from "../../../components/Screen/screen";
 import { Card, VotePayload } from "./card";
 import { useCallback } from "react";
 import { Theme } from "../../../shared/theme";
 import { FAB } from "../../../components/FAB/fab";
 import { FeedItem } from "../../../store/feed/types/feed";
+import LinearGradient from "react-native-linear-gradient";
+import ShimmerPlaceHolder from "react-native-shimmer-placeholder";
+import { ShimmerCard } from "./shimmerCard";
 
 interface RenderItem {
   item: FeedItem;
@@ -17,6 +26,7 @@ interface FeedScreenProps extends ViewProps {
   onFABPress(): void;
   onVote(payload: VotePayload): void;
   onCardPress(id: string): void;
+  showShimmer: boolean;
 }
 
 export const FeedScreen = ({
@@ -26,6 +36,7 @@ export const FeedScreen = ({
   onFABPress,
   onCardPress,
   onVote,
+  showShimmer,
 }: FeedScreenProps) => {
   const renderCard = useCallback(({ item }: RenderItem) => {
     return (
@@ -40,16 +51,20 @@ export const FeedScreen = ({
   return (
     <>
       <Screen>
-        <FlatList
-          data={feed}
-          renderItem={renderCard}
-          style={styles.list}
-          refreshControl={
-            <RefreshControl refreshing={loading} onRefresh={onRefresh} />
-          }
-          onEndReached={onRefresh}
-          onEndReachedThreshold={0.2}
-        />
+        {showShimmer ? (
+          <ShimmerCard />
+        ) : (
+          <FlatList
+            data={feed}
+            renderItem={renderCard}
+            style={styles.list}
+            refreshControl={
+              <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+            }
+            onEndReached={onRefresh}
+            onEndReachedThreshold={0.2}
+          />
+        )}
       </Screen>
       <FAB onPress={onFABPress} />
     </>
