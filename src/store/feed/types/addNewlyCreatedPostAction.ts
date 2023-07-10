@@ -1,7 +1,7 @@
 import { ReduxAction } from "../..";
 import { ActionType } from "../../actionType";
-import { Post } from "./post";
+import { CreatedPost } from "./createdPost";
 
-export interface AddNewlyCreatedPostAction extends ReduxAction<Post> {
+export interface AddNewlyCreatedPostAction extends ReduxAction<CreatedPost> {
   type: ActionType.ADD_USER_POST;
 }

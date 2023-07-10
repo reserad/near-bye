@@ -10,6 +10,7 @@ import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { useVotePost } from "../posts/hooks/useUpvotePost";
 import { VotePayload } from "./components/card";
 import { updatePostAfterVoting } from "../../store/feed/actions/updatePostAfterVoting";
+import { FeedItem } from "../../store/feed/types/feed";
 
 export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
   const [loading, setLoading] = useState(false);
@@ -51,9 +52,15 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
     navigation.navigate("MainStack", { screen: "CreatePost" });
   }, [navigation]);
 
-  const handleCardPress = useCallback((id: string) => {
-    console.info("Card clicked: ", id);
-  }, []);
+  const handleCardPress = useCallback(
+    (feedItem: FeedItem) => {
+      navigation.navigate("MainStack", {
+        screen: "Post",
+        params: { feedItem },
+      });
+    },
+    [navigation],
+  );
 
   const handleVote = useCallback(async (payload: VotePayload) => {
     try {

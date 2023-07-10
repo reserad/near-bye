@@ -11,8 +11,6 @@ import { useCallback } from "react";
 import { Theme } from "../../../shared/theme";
 import { FAB } from "../../../components/FAB/fab";
 import { FeedItem } from "../../../store/feed/types/feed";
-import LinearGradient from "react-native-linear-gradient";
-import ShimmerPlaceHolder from "react-native-shimmer-placeholder";
 import { ShimmerCard } from "./shimmerCard";
 
 interface RenderItem {
@@ -25,7 +23,7 @@ interface FeedScreenProps extends ViewProps {
   loading?: boolean;
   onFABPress(): void;
   onVote(payload: VotePayload): void;
-  onCardPress(id: string): void;
+  onCardPress(item: FeedItem): void;
   showShimmer: boolean;
 }
 
@@ -43,7 +41,7 @@ export const FeedScreen = ({
       <Card
         key={item.id}
         item={item}
-        onClick={() => onCardPress(item.id)}
+        onClick={() => onCardPress(item)}
         onVote={onVote}
       />
     );
@@ -65,8 +63,6 @@ export const FeedScreen = ({
             refreshControl={
               <RefreshControl refreshing={loading} onRefresh={onRefresh} />
             }
-            onEndReached={onRefresh}
-            onEndReachedThreshold={0.2}
           />
         )}
       </Screen>

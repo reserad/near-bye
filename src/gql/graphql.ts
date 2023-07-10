@@ -16,6 +16,16 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  author: User;
+  authorId: Scalars['String']['output'];
+  body: Scalars['String']['output'];
+  createdAt: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  parentId?: Maybe<Scalars['String']['output']>;
+};
+
 export type EmptyAuthPayload = {
   __typename?: 'EmptyAuthPayload';
   success: Scalars['Boolean']['output'];
@@ -39,6 +49,7 @@ export type FeedItem = {
   authorImage?: Maybe<Scalars['String']['output']>;
   authorName?: Maybe<Scalars['String']['output']>;
   body: Scalars['String']['output'];
+  commentCount: Scalars['Float']['output'];
   createdAt: Scalars['String']['output'];
   downvotes: Scalars['Float']['output'];
   id: Scalars['String']['output'];
@@ -101,6 +112,7 @@ export type Post = {
   __typename?: 'Post';
   author: User;
   body: Scalars['String']['output'];
+  comments: Array<Comment>;
   createdAt: Scalars['String']['output'];
   id: Scalars['String']['output'];
   latitude?: Maybe<Scalars['Float']['output']>;
@@ -115,6 +127,10 @@ export type PostCreateInput = {
   userId: Scalars['String']['input'];
 };
 
+export type PostGetInput = {
+  postId: Scalars['String']['input'];
+};
+
 export type PostVoteInput = {
   postId: Scalars['String']['input'];
   type: VoteType;
@@ -123,12 +139,18 @@ export type PostVoteInput = {
 export type Query = {
   __typename?: 'Query';
   feedGet: Array<FeedItem>;
+  postGet: Post;
   userGet: User;
 };
 
 
 export type QueryFeedGetArgs = {
   feedGetInput: FeedGetInput;
+};
+
+
+export type QueryPostGetArgs = {
+  postGetInput: PostGetInput;
 };
 
 export type User = {
@@ -185,7 +207,7 @@ export type FeedGetQueryVariables = Exact<{
 }>;
 
 
-export type FeedGetQuery = { __typename?: 'Query', feedGet: Array<{ __typename?: 'FeedItem', id: string, body: string, createdAt: string, upvotes: number, downvotes: number, userVoteStatus: VoteStatus, authorId: string, authorName?: string | null, authorImage?: string | null }> };
+export type FeedGetQuery = { __typename?: 'Query', feedGet: Array<{ __typename?: 'FeedItem', id: string, body: string, createdAt: string, upvotes: number, downvotes: number, userVoteStatus: VoteStatus, authorId: string, authorName?: string | null, authorImage?: string | null, commentCount: number }> };
 
 export type PostCreateMutationVariables = Exact<{
   postCreateInput: PostCreateInput;
@@ -193,6 +215,13 @@ export type PostCreateMutationVariables = Exact<{
 
 
 export type PostCreateMutation = { __typename?: 'Mutation', postCreate: { __typename?: 'Post', id: string, body: string, createdAt: string, latitude?: number | null, longitude?: number | null, author: { __typename?: 'User', id: string, profileImage?: string | null } } };
+
+export type PostGetQueryVariables = Exact<{
+  postGetInput: PostGetInput;
+}>;
+
+
+export type PostGetQuery = { __typename?: 'Query', postGet: { __typename?: 'Post', id: string, body: string, comments: Array<{ __typename?: 'Comment', id: string, parentId?: string | null, authorId: string, body: string, createdAt: string, author: { __typename?: 'User', id: string, profileImage?: string | null, name?: string | null } }> } };
 
 export type PostVoteMutationVariables = Exact<{
   postVoteInput: PostVoteInput;
@@ -209,7 +238,8 @@ export type UserGetQuery = { __typename?: 'Query', userGet: { __typename?: 'User
 
 export const SendOtpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"sendOtp"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"otpSendInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"OtpSendInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sendOtp"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"otpSendInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"otpSendInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}}]}}]}}]} as unknown as DocumentNode<SendOtpMutation, SendOtpMutationVariables>;
 export const VerifyOtpDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"verifyOtp"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"otpVerifyInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"OtpVerifyInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"verifyOtp"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"otpVerifyInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"otpVerifyInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accessToken"}},{"kind":"Field","name":{"kind":"Name","value":"refreshToken"}},{"kind":"Field","name":{"kind":"Name","value":"tokenId"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"phoneNumber"}}]}}]}}]}}]} as unknown as DocumentNode<VerifyOtpMutation, VerifyOtpMutationVariables>;
-export const FeedGetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"feedGet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"feedGetInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"FeedGetInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"feedGet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"feedGetInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"feedGetInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"upvotes"}},{"kind":"Field","name":{"kind":"Name","value":"downvotes"}},{"kind":"Field","name":{"kind":"Name","value":"userVoteStatus"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"authorName"}},{"kind":"Field","name":{"kind":"Name","value":"authorImage"}}]}}]}}]} as unknown as DocumentNode<FeedGetQuery, FeedGetQueryVariables>;
+export const FeedGetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"feedGet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"feedGetInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"FeedGetInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"feedGet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"feedGetInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"feedGetInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"upvotes"}},{"kind":"Field","name":{"kind":"Name","value":"downvotes"}},{"kind":"Field","name":{"kind":"Name","value":"userVoteStatus"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"authorName"}},{"kind":"Field","name":{"kind":"Name","value":"authorImage"}},{"kind":"Field","name":{"kind":"Name","value":"commentCount"}}]}}]}}]} as unknown as DocumentNode<FeedGetQuery, FeedGetQueryVariables>;
 export const PostCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"postCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postCreateInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PostCreateInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"postCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"postCreateInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postCreateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"latitude"}},{"kind":"Field","name":{"kind":"Name","value":"longitude"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"profileImage"}}]}}]}}]}}]} as unknown as DocumentNode<PostCreateMutation, PostCreateMutationVariables>;
+export const PostGetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"postGet"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postGetInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PostGetInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"postGet"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"postGetInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postGetInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"comments"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"authorId"}},{"kind":"Field","name":{"kind":"Name","value":"body"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"profileImage"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<PostGetQuery, PostGetQueryVariables>;
 export const PostVoteDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"postVote"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"postVoteInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PostVoteInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"postVote"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"postVoteInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"postVoteInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}}]}}]}}]} as unknown as DocumentNode<PostVoteMutation, PostVoteMutationVariables>;
 export const UserGetDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"userGet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userGet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"profileImage"}}]}}]}}]} as unknown as DocumentNode<UserGetQuery, UserGetQueryVariables>;

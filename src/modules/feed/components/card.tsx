@@ -4,10 +4,11 @@ import { formatDate } from "../utils/formatDate";
 import { FeedItem } from "../../../store/feed/types/feed";
 import { VoteButton, VoteButtonType } from "./voteButton";
 import { VoteType } from "../../../gql/graphql";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 export type CardProps = {
   item: FeedItem;
-  onClick(): void;
+  onClick?(): void;
   onVote(payload: VotePayload): void;
 };
 
@@ -17,10 +18,20 @@ export type VotePayload = {
 };
 
 export const Card = ({ item, onClick, onVote }: CardProps) => {
-  const { body, upvotes, downvotes, authorName, createdAt, userVoteStatus } =
-    item;
+  const {
+    body,
+    upvotes,
+    downvotes,
+    authorName,
+    createdAt,
+    userVoteStatus,
+    commentCount,
+  } = item;
   return (
-    <TouchableOpacity activeOpacity={0.5} onPress={onClick}>
+    <TouchableOpacity
+      activeOpacity={0.5}
+      onPress={onClick}
+      disabled={!!!onClick}>
       <View style={styles.card}>
         <View style={styles.header}>
           <View style={styles.authorPicture}></View>
@@ -49,6 +60,14 @@ export const Card = ({ item, onClick, onVote }: CardProps) => {
               onVote({ postId: item.id, voteType: VoteType.Downvote })
             }
           />
+          <View style={[styles.commentContainer]}>
+            <MaterialCommunityIcons
+              name="comment-outline"
+              size={20}
+              color={Theme.color.darkGray}
+            />
+            <Text style={styles.commentCount}>{commentCount}</Text>
+          </View>
         </View>
       </View>
     </TouchableOpacity>
@@ -105,5 +124,17 @@ const styles = StyleSheet.create({
     width: Theme.padding.P10,
     justifyContent: "center",
     alignItems: "center",
+  },
+  commentContainer: {
+    width: Theme.padding.P12,
+    height: Theme.padding.P12,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    marginHorizontal: Theme.padding.P2,
+  },
+  commentCount: {
+    color: Theme.color.darkGray,
+    marginStart: Theme.padding.P1,
   },
 });

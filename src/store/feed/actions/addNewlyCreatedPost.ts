@@ -1,9 +1,9 @@
 import { ActionType } from "../../actionType";
-import { Post } from "../types/post";
+import { CreatedPost } from "../types/createdPost";
 import { AddNewlyCreatedPostAction } from "../types/addNewlyCreatedPostAction";
 
 export const addNewlyCreatedPost = (
-  response: Post,
+  response: CreatedPost,
 ): AddNewlyCreatedPostAction => ({
   type: ActionType.ADD_USER_POST,
   payload: response,

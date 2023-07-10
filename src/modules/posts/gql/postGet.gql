@@ -1,0 +1,18 @@
+query postGet($postGetInput: PostGetInput!) {
+  postGet(postGetInput: $postGetInput) {
+    id
+    body
+    comments {
+      id
+      parentId
+      authorId
+      body
+      createdAt
+      author {
+        id
+        profileImage
+        name
+      }
+    }
+  }
+}

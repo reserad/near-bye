@@ -9,5 +9,6 @@ query feedGet($feedGetInput: FeedGetInput!) {
     authorId
     authorName
     authorImage
+    commentCount
   }
 }
