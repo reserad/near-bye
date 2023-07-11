@@ -1,13 +1,13 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Theme } from "../../../shared/theme";
 import { formatDate } from "../utils/formatDate";
-import { FeedItem } from "../../../store/feed/types/feed";
 import { VoteButton, VoteButtonType } from "./voteButton";
 import { VoteType } from "../../../gql/graphql";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { Post } from "../../posts/types/post";
 
 export type CardProps = {
-  item: FeedItem;
+  item: Post;
   onClick?(): void;
   onVote(payload: VotePayload): void;
 };
@@ -18,15 +18,7 @@ export type VotePayload = {
 };
 
 export const Card = ({ item, onClick, onVote }: CardProps) => {
-  const {
-    body,
-    upvotes,
-    downvotes,
-    authorName,
-    createdAt,
-    userVoteStatus,
-    commentCount,
-  } = item;
+  const { body, author, score, createdAt, userVoteStatus, comments } = item;
   return (
     <TouchableOpacity
       activeOpacity={0.5}
@@ -35,7 +27,7 @@ export const Card = ({ item, onClick, onVote }: CardProps) => {
       <View style={styles.card}>
         <View style={styles.header}>
           <View style={styles.authorPicture}></View>
-          <Text>{authorName}</Text>
+          <Text>{author.name}</Text>
           <Text> . {formatDate(createdAt)}</Text>
         </View>
 
@@ -51,7 +43,7 @@ export const Card = ({ item, onClick, onVote }: CardProps) => {
             }
           />
           <View style={styles.scoreContainer}>
-            <Text>{upvotes - downvotes}</Text>
+            <Text>{score}</Text>
           </View>
           <VoteButton
             type={VoteButtonType.DOWN}
@@ -66,7 +58,7 @@ export const Card = ({ item, onClick, onVote }: CardProps) => {
               size={20}
               color={Theme.color.darkGray}
             />
-            <Text style={styles.commentCount}>{commentCount}</Text>
+            <Text style={styles.commentCount}>{comments.length}</Text>
           </View>
         </View>
       </View>

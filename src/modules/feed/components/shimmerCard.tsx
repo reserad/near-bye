@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: Theme.padding.P2,
     height: Theme.padding.P12,
-    width: 150,
+    width: "100%",
   },
   upvoteButton: {
     marginRight: Theme.padding.P2,

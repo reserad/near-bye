@@ -1,8 +1,8 @@
 import { VoteStatus, VoteType } from "../../gql/graphql";
+import { Post } from "../../modules/posts/types/post";
 import { RootAction } from "../action";
 import { ActionType } from "../actionType";
 import { FeedState } from "./feedState";
-import { FeedItem } from "./types/feed";
 
 const initialState: FeedState = {
   feed: [],
@@ -20,15 +20,14 @@ export const FeedReducer = (
       };
     case ActionType.ADD_USER_POST:
       const post = action.payload;
-      const newFeedItem: FeedItem = {
+      const newFeedItem: Post = {
         id: post.id,
         body: post.body,
         userVoteStatus: VoteStatus.Upvoted,
-        upvotes: 1,
-        downvotes: 0,
+        score: 1,
         createdAt: post.createdAt,
-        authorImage: post.author.profileImage,
-        authorId: post.author.id,
+        author: post.author,
+        comments: [],
       };
       return {
         ...state,
@@ -44,20 +43,19 @@ export const FeedReducer = (
                 return {
                   ...item,
                   userVoteStatus: VoteStatus.Neither,
-                  upvotes: item.upvotes - 1,
+                  score: item.score - 1,
                 };
               } else if (item.userVoteStatus === VoteStatus.Downvoted) {
                 return {
                   ...item,
                   userVoteStatus: VoteStatus.Upvoted,
-                  downvotes: item.downvotes - 1,
-                  upvotes: item.upvotes + 1,
+                  score: item.score + 2,
                 };
               } else {
                 return {
                   ...item,
                   userVoteStatus: VoteStatus.Upvoted,
-                  upvotes: item.upvotes + 1,
+                  score: item.score + 1,
                 };
               }
             }
@@ -66,20 +64,19 @@ export const FeedReducer = (
                 return {
                   ...item,
                   userVoteStatus: VoteStatus.Neither,
-                  downvotes: item.downvotes - 1,
+                  score: item.score + 1,
                 };
               } else if (item.userVoteStatus === VoteStatus.Upvoted) {
                 return {
                   ...item,
                   userVoteStatus: VoteStatus.Downvoted,
-                  downvotes: item.downvotes + 1,
-                  upvotes: item.upvotes - 1,
+                  score: item.score - 2,
                 };
               } else {
                 return {
                   ...item,
                   userVoteStatus: VoteStatus.Downvoted,
-                  downvotes: item.downvotes + 1,
+                  score: item.score - 1,
                 };
               }
             }

@@ -1,5 +1,5 @@
-import { FeedItem } from "./types/feed";
+import { Post } from "../../modules/posts/types/post";
 
 export type FeedState = {
-  feed: FeedItem[];
+  feed: Post[];
 };

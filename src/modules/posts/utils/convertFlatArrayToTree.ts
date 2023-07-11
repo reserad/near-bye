@@ -1,3 +1,4 @@
+import { User } from "../../../store/user/types/user";
 import { Comment } from "../types/comment";
 
 export const convertFlatArrayToNodeTree = (
@@ -16,7 +17,7 @@ export const convertFlatArrayToNodeTree = (
       );
       return {
         __typename: item.__typename,
-        authorId: item.authorId,
+        author: item.author,
         body: item.body,
         parentId: item.parentId,
         id: item.id,
@@ -27,27 +28,11 @@ export const convertFlatArrayToNodeTree = (
   return data;
 };
 
-export const flatten = (data: TreeNode[]): Comment[] =>
-  data.flatMap(
-    ({
-      __typename,
-      authorId,
-      body,
-      children,
-      createdAt,
-      id,
-      parentId,
-    }: TreeNode) => [
-      { __typename, authorId, body, createdAt, id, parentId },
-      ...flatten(children || []),
-    ],
-  );
-
 export type TreeNode = {
   __typename: "Comment";
   id: string;
   parentId: string | null;
-  authorId: string;
+  author: User;
   body: string;
   children: TreeNode[];
   createdAt: string;

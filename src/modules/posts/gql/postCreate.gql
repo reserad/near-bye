@@ -8,6 +8,8 @@ mutation postCreate($postCreateInput: PostCreateInput!) {
     author {
       id
       profileImage
+      createdAt
+      name
     }
   }
 }

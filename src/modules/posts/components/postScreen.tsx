@@ -6,22 +6,22 @@ import { TreeNode } from "../utils/convertFlatArrayToTree";
 import { FlashList } from "@shopify/flash-list";
 import { Card } from "../../feed/components/card";
 import { FeedItem } from "../../../store/feed/types/feed";
+import { ShimmerCard } from "../../feed/components/shimmerCard";
+import { Post } from "../types/post";
 
 export type ScreenProps = {
-  post: FeedItem;
+  post: Post;
   treeNodes: TreeNode[];
+  loading: boolean;
 };
 
 export type CommentProps = {
-  post?: FeedItem;
   node: TreeNode;
 };
 
-export const CommentListItem = ({ node, post }: CommentProps) => {
-  const isRootNode = node.parentId === null;
+export const CommentListItem = ({ node }: CommentProps) => {
   return (
     <>
-      {isRootNode ? <Card item={post} onVote={null} /> : null}
       <View style={styles.listItem}>
         <Text>{node.body}</Text>
       </View>
@@ -29,16 +29,24 @@ export const CommentListItem = ({ node, post }: CommentProps) => {
   );
 };
 
-export const PostScreen = ({ post, treeNodes }: ScreenProps) => {
+export const PostScreen = ({ post, treeNodes, loading }: ScreenProps) => {
   return (
     <Screen showBackButton style={styles.screen}>
       <View style={styles.container}>
-        <FlashList
-          data={treeNodes}
-          renderItem={({ item }) => <CommentListItem node={item} post={post} />}
-          estimatedItemSize={200}
-          contentContainerStyle={styles.list}
-        />
+        {loading ? (
+          <View style={styles.shimmerContainer}>
+            <ShimmerCard />
+          </View>
+        ) : null}
+        {!loading && post && treeNodes ? (
+          <FlashList
+            data={treeNodes}
+            renderItem={({ item }) => <CommentListItem node={item} />}
+            estimatedItemSize={200}
+            contentContainerStyle={styles.list}
+            ListHeaderComponent={<Card item={post} onVote={null} />}
+          />
+        ) : null}
       </View>
     </Screen>
   );
@@ -65,5 +73,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 2,
     elevation: 3,
+  },
+  shimmerContainer: {
+    padding: Theme.padding.P4,
   },
 });

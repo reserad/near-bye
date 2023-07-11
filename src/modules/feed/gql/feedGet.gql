@@ -3,12 +3,25 @@ query feedGet($feedGetInput: FeedGetInput!) {
     id
     body
     createdAt
-    upvotes
-    downvotes
     userVoteStatus
-    authorId
-    authorName
-    authorImage
-    commentCount
+    author {
+      id
+      name
+      profileImage
+      createdAt
+    }
+    comments {
+      id
+      parentId
+      body
+      createdAt
+      author {
+        id
+        name
+        profileImage
+        createdAt
+      }
+    }
+    score
   }
 }

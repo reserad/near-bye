@@ -2,17 +2,26 @@ query postGet($postGetInput: PostGetInput!) {
   postGet(postGetInput: $postGetInput) {
     id
     body
+    createdAt
+    userVoteStatus
+    author {
+      id
+      name
+      profileImage
+      createdAt
+    }
     comments {
       id
       parentId
-      authorId
       body
       createdAt
       author {
         id
-        profileImage
         name
+        profileImage
+        createdAt
       }
     }
+    score
   }
 }
