@@ -1,8 +1,8 @@
 import { SetUserFeedAction } from "../types/setUserFeedAction";
 import { ActionType } from "../../actionType";
-import { FeedItem } from "../types/feed";
+import { Post } from "../../../modules/posts/types/post";
 
-export const setFeed = (response: FeedItem[]): SetUserFeedAction => ({
+export const setFeed = (response: Post[]): SetUserFeedAction => ({
   type: ActionType.SET_USER_FEED,
   payload: response,
 });

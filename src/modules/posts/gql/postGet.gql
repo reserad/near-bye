@@ -1,25 +1,47 @@
 query postGet($postGetInput: PostGetInput!) {
   postGet(postGetInput: $postGetInput) {
+    __typename
     id
     body
     createdAt
     userVoteStatus
     author {
+      __typename
       id
       name
       profileImage
       createdAt
     }
     comments {
-      id
-      parentId
+      __typename
+      author {
+        __typename
+        id
+        profileImage
+        name
+        createdAt
+      }
       body
       createdAt
-      author {
+      id
+      parentId
+      parent {
+        __typename
         id
-        name
-        profileImage
+        parentId
+        body
+        author {
+          __typename
+          id
+          name
+          profileImage
+          createdAt
+        }
         createdAt
+        id
+      }
+      children {
+        id
       }
     }
     score

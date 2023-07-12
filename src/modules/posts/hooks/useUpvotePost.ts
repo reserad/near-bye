@@ -1,7 +1,7 @@
 import { useApolloClient } from "@apollo/client";
 import { PostVoteDocument } from "../../../gql/graphql";
 import { useCallback } from "react";
-import { VotePayload } from "../../feed/components/card";
+import { VotePayload } from "../components/postCard";
 
 export const useVotePost = () => {
   const client = useApolloClient();

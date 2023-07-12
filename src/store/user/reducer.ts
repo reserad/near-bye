@@ -10,6 +10,7 @@ const initialState: UserState = {
     tokenId: "",
   },
   phoneNumber: "",
+  profileImage: "",
   isAuthenticated: false,
 };
 
@@ -19,21 +20,26 @@ export const UserReducer = (
 ): UserState => {
   switch (action.type) {
     case ActionType.USER_LOGIN:
-      const payload = action.payload;
+      const { accessToken, refreshToken, tokenId, user } = action.payload;
       return {
         ...state,
         auth: {
-          accessToken: payload.accessToken,
-          refreshToken: payload.refreshToken,
-          tokenId: payload.tokenId,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          tokenId: tokenId,
         },
-        id: payload.user.id,
-        phoneNumber: payload.user.phoneNumber,
+        id: user.id,
+        phoneNumber: user.phoneNumber,
         isAuthenticated: true,
       };
     case ActionType.USER_SIGN_OUT:
       return {
         ...initialState,
+      };
+    case ActionType.USER_SET:
+      return {
+        ...state,
+        profileImage: action.payload.profileImage,
       };
     default:
       return state;

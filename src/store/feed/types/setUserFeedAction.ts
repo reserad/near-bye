@@ -1,7 +1,7 @@
 import { ReduxAction } from "../..";
+import { Post } from "../../../modules/posts/types/post";
 import { ActionType } from "../../actionType";
-import { FeedItem } from "./feed";
 
-export interface SetUserFeedAction extends ReduxAction<FeedItem[]> {
+export interface SetUserFeedAction extends ReduxAction<Post[]> {
   type: ActionType.SET_USER_FEED;
 }

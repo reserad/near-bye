@@ -8,7 +8,7 @@ import { VoteStatus } from "../../../gql/graphql";
 export interface VoteButtonProps extends ViewProps {
   type: VoteButtonType;
   status: VoteStatus;
-  onPress(): void;
+  onPress?(): void;
 }
 
 export enum VoteButtonType {
@@ -26,12 +26,12 @@ export const VoteButton = ({
     switch (type) {
       case VoteButtonType.UP:
         if (status === VoteStatus.Upvoted) {
-          return Theme.color.purple;
+          return Theme.color.red;
         }
         return Theme.color.darkGray;
       case VoteButtonType.DOWN:
         if (status === VoteStatus.Downvoted) {
-          return Theme.color.red;
+          return Theme.color.purple;
         }
         return Theme.color.darkGray;
       default:
@@ -46,10 +46,9 @@ export const VoteButton = ({
 
   const styles = StyleSheet.create({
     button: {
-      width: Theme.padding.P12,
-      height: Theme.padding.P12,
-      borderRadius: Theme.padding.P6,
-      backgroundColor: Theme.color.lightGray,
+      width: Theme.padding.P10,
+      height: Theme.padding.P10,
+      borderRadius: Theme.padding.P3,
       justifyContent: "center",
       alignItems: "center",
     },
@@ -60,7 +59,8 @@ export const VoteButton = ({
     <TouchableOpacity
       activeOpacity={0.5}
       style={styles.container}
-      onPress={onPress}>
+      disabled={!!onPress}
+      onPress={onPress ? onPress : null}>
       <View style={[styles.button, style]}>
         <MaterialCommunityIcons {...iconProps} />
       </View>

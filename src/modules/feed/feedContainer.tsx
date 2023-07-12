@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FeedScreen } from "./components/feedScreen";
 import { BottomTabStackProps } from "../../navigation/types";
 import { useGetFeed } from "./hooks/useGetFeed";
@@ -8,9 +8,9 @@ import { getUserFeed } from "./selectors/getUserFeed";
 import { setFeed } from "../../store/feed/actions/setFeed";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { useVotePost } from "../posts/hooks/useUpvotePost";
-import { VotePayload } from "./components/card";
+import { VotePayload } from "../posts/components/postCard";
 import { updatePostAfterVoting } from "../../store/feed/actions/updatePostAfterVoting";
-import { FeedItem } from "../../store/feed/types/feed";
+import { Post } from "../posts/types/post";
 
 export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
   const [loading, setLoading] = useState(false);
@@ -53,10 +53,10 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
   }, [navigation]);
 
   const handleCardPress = useCallback(
-    (feedItem: FeedItem) => {
+    ({ id }: Post) => {
       navigation.navigate("MainStack", {
         screen: "Post",
-        params: { feedItem },
+        params: { postId: id },
       });
     },
     [navigation],

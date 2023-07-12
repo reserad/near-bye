@@ -1,5 +1,5 @@
 import { User } from "../../../store/user/types/user";
-import { Comment } from "../types/comment";
+import { Comment } from "../../comments/types/comment";
 
 export const convertFlatArrayToNodeTree = (
   items: Comment[],

@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Screen } from "../../components/Screen/screen";
 import { Button } from "../../components/Button/button";
 import { useNewDispatch } from "../../store/hooks/useNewDispatch";
@@ -12,6 +12,11 @@ import {
   PutObjectCommand,
   UploadPartCommand,
 } from "@aws-sdk/client-s3";
+import { useEffect } from "react";
+import { useGetUser } from "../users/hooks/useGetUser";
+import { useNewSelector } from "../../store/hooks/useNewSelector";
+import { getCurrentUser } from "../users/selectors/getCurrentUser";
+import { setUser } from "../../store/user/actions/setUser";
 
 export const AccountContainer = ({
   navigation,
@@ -21,6 +26,8 @@ export const AccountContainer = ({
     dispatch(signOut());
     navigation.navigate("AuthStack", { screen: "SendOtp" });
   };
+  const { getUser } = useGetUser();
+  const user = useNewSelector(getCurrentUser);
   const handleProfilePress = async () => {
     // const { assets, errorMessage } = await launchImageLibrary({
     //   mediaType: "photo",
@@ -45,12 +52,30 @@ export const AccountContainer = ({
     // console.log(name);
     //}
   };
+
+  const fetchUser = async () => {
+    const user = await getUser();
+    dispatch(setUser(user));
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
   return (
     <Screen scroll>
       <View style={styles.container}>
         <View style={styles.profilePictureContainer}>
           <TouchableOpacity activeOpacity={0.6} onPress={handleProfilePress}>
-            <View style={styles.profilePicture} />
+            <View style={styles.profilePicture}>
+              {user.profileImage ? (
+                <Image
+                  source={{
+                    uri: user.profileImage,
+                  }}
+                  style={styles.profilePicture}
+                />
+              ) : null}
+            </View>
           </TouchableOpacity>
         </View>
         <Button text="Sign out" onPress={handleOnPress} />

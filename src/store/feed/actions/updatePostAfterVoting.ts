@@ -1,5 +1,5 @@
 import { ActionType } from "../../actionType";
-import { VotePayload } from "../../../modules/feed/components/card";
+import { VotePayload } from "../../../modules/posts/components/postCard";
 import { VotePostAction } from "../types/votePostAction";
 
 export const updatePostAfterVoting = (

@@ -1,8 +1,10 @@
 query userGet {
   userGet {
+    __typename
     id
     name
     createdAt
+    phoneNumber
     profileImage
   }
 }

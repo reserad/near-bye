@@ -1,23 +1,22 @@
-query feedGet($feedGetInput: FeedGetInput!) {
-  feedGet(feedGetInput: $feedGetInput) {
+query commentGet($commentGetInput: CommentGetInput!) {
+  commentGet(commentGetInput: $commentGetInput) {
     __typename
-    id
-    body
-    createdAt
-    userVoteStatus
-    score
     author {
       __typename
       id
-      name
       profileImage
+      name
       createdAt
     }
-    comments {
+    body
+    createdAt
+    id
+    parentId
+    parent {
       __typename
       id
+      parentId
       body
-      createdAt
       author {
         __typename
         id
@@ -25,10 +24,11 @@ query feedGet($feedGetInput: FeedGetInput!) {
         name
         createdAt
       }
-      parentId
-      children {
-        id
-      }
+      createdAt
+      id
+    }
+    children {
+      id
     }
   }
 }

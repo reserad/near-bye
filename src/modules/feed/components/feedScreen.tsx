@@ -6,24 +6,24 @@ import {
   ViewProps,
 } from "react-native";
 import { Screen } from "../../../components/Screen/screen";
-import { Card, VotePayload } from "./card";
+import { PostCard, VotePayload } from "../../posts/components/postCard";
 import { useCallback } from "react";
 import { Theme } from "../../../shared/theme";
 import { FAB } from "../../../components/FAB/fab";
-import { FeedItem } from "../../../store/feed/types/feed";
 import { ShimmerCard } from "./shimmerCard";
+import { Post } from "../../posts/types/post";
 
 interface RenderItem {
-  item: FeedItem;
+  item: Post;
 }
 
 interface FeedScreenProps extends ViewProps {
-  feed: FeedItem[];
+  feed: Post[];
   onRefresh(): void;
   loading?: boolean;
   onFABPress(): void;
   onVote(payload: VotePayload): void;
-  onCardPress(item: FeedItem): void;
+  onCardPress(item: Post): void;
   showShimmer: boolean;
 }
 
@@ -38,7 +38,7 @@ export const FeedScreen = ({
 }: FeedScreenProps) => {
   const renderCard = useCallback(({ item }: RenderItem) => {
     return (
-      <Card
+      <PostCard
         key={item.id}
         item={item}
         onClick={() => onCardPress(item)}

@@ -1,24 +1,24 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Theme } from "../../../shared/theme";
-import { formatDate } from "../utils/formatDate";
-import { VoteButton, VoteButtonType } from "./voteButton";
-import { VoteType } from "../../../gql/graphql";
+import { formatDate } from "../../feed/utils/formatDate";
+import { VoteButton, VoteButtonType } from "../../feed/components/voteButton";
+import { VoteStatus, VoteType } from "../../../gql/graphql";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { Post } from "../../posts/types/post";
+import { Comment } from "../types/comment";
 
 export type CardProps = {
-  item: Post;
+  item: Comment;
   onClick?(): void;
   onVote(payload: VotePayload): void;
 };
 
 export type VotePayload = {
-  postId: string;
+  commentId: string;
   voteType: VoteType;
 };
 
-export const Card = ({ item, onClick, onVote }: CardProps) => {
-  const { body, author, score, createdAt, userVoteStatus, comments } = item;
+export const CommentCard = ({ item, onClick, onVote }: CardProps) => {
+  const { body, author, createdAt, children } = item;
   return (
     <TouchableOpacity
       activeOpacity={0.5}
@@ -26,7 +26,16 @@ export const Card = ({ item, onClick, onVote }: CardProps) => {
       disabled={!!!onClick}>
       <View style={styles.card}>
         <View style={styles.header}>
-          <View style={styles.authorPicture}></View>
+          <View style={styles.authorPicture}>
+            {author.profileImage ? (
+              <Image
+                source={{
+                  uri: author.profileImage,
+                }}
+                style={styles.authorPicture}
+              />
+            ) : null}
+          </View>
           <Text>{author.name}</Text>
           <Text> . {formatDate(createdAt)}</Text>
         </View>
@@ -34,31 +43,24 @@ export const Card = ({ item, onClick, onVote }: CardProps) => {
         <View style={styles.bodyContainer}>
           <Text style={styles.body}>{body}</Text>
         </View>
-        <View style={styles.footer}>
-          <VoteButton
-            type={VoteButtonType.UP}
-            status={userVoteStatus}
-            onPress={() =>
-              onVote({ postId: item.id, voteType: VoteType.Upvote })
-            }
-          />
-          <View style={styles.scoreContainer}>
-            <Text>{score}</Text>
+        <View style={styles.footerContainer}>
+          <View style={styles.vote}>
+            <VoteButton type={VoteButtonType.UP} status={VoteStatus.Neither} />
+            <View style={styles.scoreContainer}>
+              <Text>{0}</Text>
+            </View>
+            <VoteButton
+              type={VoteButtonType.DOWN}
+              status={VoteStatus.Neither}
+            />
           </View>
-          <VoteButton
-            type={VoteButtonType.DOWN}
-            status={userVoteStatus}
-            onPress={() =>
-              onVote({ postId: item.id, voteType: VoteType.Downvote })
-            }
-          />
-          <View style={[styles.commentContainer]}>
+          <View style={styles.commentContainer}>
             <MaterialCommunityIcons
               name="comment-outline"
               size={20}
               color={Theme.color.darkGray}
             />
-            <Text style={styles.commentCount}>{comments.length}</Text>
+            <Text style={styles.commentCount}>{children.length}</Text>
           </View>
         </View>
       </View>
@@ -68,7 +70,6 @@ export const Card = ({ item, onClick, onVote }: CardProps) => {
 
 const styles = StyleSheet.create({
   card: {
-    height: 250,
     padding: Theme.padding.P4,
     borderRadius: Theme.padding.P2,
     marginBottom: Theme.padding.P5,
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1,
     borderRadius: Theme.padding.P2,
-    backgroundColor: Theme.color.purpleDesaturated,
+    backgroundColor: Theme.color.lightGray,
     padding: Theme.padding.P4,
   },
   authorPicture: {
@@ -103,10 +104,15 @@ const styles = StyleSheet.create({
     marginBottom: Theme.padding.P3,
     alignItems: "center",
   },
-  footer: {
-    alignItems: "center",
+  footerContainer: {
     flexDirection: "row",
     marginTop: Theme.padding.P2,
+  },
+  vote: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Theme.color.lightGray,
+    borderRadius: Theme.padding.P3,
   },
   upvoteButton: {
     marginRight: Theme.padding.P2,
@@ -118,12 +124,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   commentContainer: {
-    width: Theme.padding.P12,
-    height: Theme.padding.P12,
+    width: Theme.padding.P14,
+    height: Theme.padding.P10,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
     marginHorizontal: Theme.padding.P2,
+    backgroundColor: Theme.color.lightGray,
+    borderRadius: Theme.padding.P3,
   },
   commentCount: {
     color: Theme.color.darkGray,

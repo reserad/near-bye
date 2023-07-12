@@ -1,11 +1,13 @@
 mutation postCreate($postCreateInput: PostCreateInput!) {
   postCreate(postCreateInput: $postCreateInput) {
+    __typename
     id
     body
     createdAt
     latitude
     longitude
     author {
+      __typename
       id
       profileImage
       createdAt
