@@ -41,7 +41,18 @@ query postGet($postGetInput: PostGetInput!) {
         id
       }
       children {
+        __typename
         id
+        body
+        createdAt
+        author {
+          __typename
+          id
+          profileImage
+          name
+          createdAt
+        }
+        parentId
       }
     }
     score

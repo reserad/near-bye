@@ -5,4 +5,5 @@ export enum ActionType {
   SET_USER_FEED = "SET_USER_FEED",
   ADD_USER_POST = "ADD_USER_POST",
   VOTE_POST = "VOTE_POST",
+  SET_POST = "SET_POST",
 }

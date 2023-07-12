@@ -1,7 +1,7 @@
 import {
-  FlatList,
   RefreshControl,
   StyleSheet,
+  Text,
   View,
   ViewProps,
 } from "react-native";
@@ -12,6 +12,7 @@ import { Theme } from "../../../shared/theme";
 import { FAB } from "../../../components/FAB/fab";
 import { ShimmerCard } from "./shimmerCard";
 import { Post } from "../../posts/types/post";
+import { FlashList } from "@shopify/flash-list";
 
 interface RenderItem {
   item: Post;
@@ -26,6 +27,14 @@ interface FeedScreenProps extends ViewProps {
   onCardPress(item: Post): void;
   showShimmer: boolean;
 }
+
+const Header = () => {
+  return (
+    <View style={styles.header}>
+      <Text style={styles.headerText}>What's happening near you</Text>
+    </View>
+  );
+};
 
 export const FeedScreen = ({
   feed,
@@ -51,18 +60,21 @@ export const FeedScreen = ({
       <Screen>
         {showShimmer ? (
           <View style={styles.shimmerContainer}>
+            <Header />
             <ShimmerCard />
             <ShimmerCard />
             <ShimmerCard />
           </View>
         ) : (
-          <FlatList
+          <FlashList
             data={feed}
             renderItem={renderCard}
-            style={styles.list}
+            contentContainerStyle={styles.list}
             refreshControl={
               <RefreshControl refreshing={loading} onRefresh={onRefresh} />
             }
+            ListHeaderComponent={<Header />}
+            estimatedItemSize={250}
           />
         )}
       </Screen>
@@ -73,10 +85,15 @@ export const FeedScreen = ({
 
 const styles = StyleSheet.create({
   list: {
-    padding: Theme.padding.P4,
     backgroundColor: Theme.color.lightGray,
   },
-  shimmerContainer: {
-    padding: Theme.padding.P4,
+  shimmerContainer: {},
+  header: {
+    marginVertical: Theme.padding.P4,
+    height: Theme.padding.P12,
+    justifyContent: "center",
+  },
+  headerText: {
+    textAlign: "center",
   },
 });

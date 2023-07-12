@@ -21,6 +21,7 @@ export const FeedReducer = (
     case ActionType.ADD_USER_POST:
       const post = action.payload;
       const newFeedItem: Post = {
+        __typename: "UserPost",
         id: post.id,
         body: post.body,
         userVoteStatus: VoteStatus.Upvoted,

@@ -4,7 +4,6 @@ import {
 } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { StackScreenProps } from "@react-navigation/stack";
-import { Post } from "../modules/posts/types/post";
 
 export type RootStackParamList = {
   AuthStack: NavigatorScreenParams<AuthStackParamList>;
@@ -15,7 +14,8 @@ export type MainStackParamList = {
   CreatePost: undefined;
   Post: { postId: string };
   BottomTabs: NavigatorScreenParams<BottomTabStackParamList>;
-  Comment: { commentId: string; post: Post };
+  Comment: { commentId: string; postId: string };
+  Test: undefined;
 };
 
 export type BottomTabStackParamList = {

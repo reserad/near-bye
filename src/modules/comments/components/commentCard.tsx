@@ -8,7 +8,8 @@ import { Comment } from "../types/comment";
 
 export type CardProps = {
   item: Comment;
-  onClick?(): void;
+  isRootComment: boolean;
+  onClick(commentId: string): void;
   onVote(payload: VotePayload): void;
 };
 
@@ -17,13 +18,18 @@ export type VotePayload = {
   voteType: VoteType;
 };
 
-export const CommentCard = ({ item, onClick, onVote }: CardProps) => {
-  const { body, author, createdAt, children } = item;
+export const CommentCard = ({
+  item,
+  onClick,
+  onVote,
+  isRootComment,
+}: CardProps) => {
+  const { id, body, author, createdAt, children } = item;
   return (
     <TouchableOpacity
       activeOpacity={0.5}
-      onPress={onClick}
-      disabled={!!!onClick}>
+      disabled={isRootComment}
+      onPress={() => onClick(id)}>
       <View style={styles.card}>
         <View style={styles.header}>
           <View style={styles.authorPicture}>
@@ -71,7 +77,6 @@ export const CommentCard = ({ item, onClick, onVote }: CardProps) => {
 const styles = StyleSheet.create({
   card: {
     padding: Theme.padding.P4,
-    borderRadius: Theme.padding.P2,
     marginBottom: Theme.padding.P5,
     backgroundColor: Theme.color.white,
     shadowOffset: { width: 0, height: 1 },

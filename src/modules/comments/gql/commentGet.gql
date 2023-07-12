@@ -1,6 +1,9 @@
 query commentGet($commentGetInput: CommentGetInput!) {
   commentGet(commentGetInput: $commentGetInput) {
     __typename
+    id
+    body
+    createdAt
     author {
       __typename
       id
@@ -8,13 +11,11 @@ query commentGet($commentGetInput: CommentGetInput!) {
       name
       createdAt
     }
-    body
-    createdAt
-    id
     parentId
     parent {
       __typename
       id
+      createdAt
       parentId
       body
       author {
@@ -24,11 +25,33 @@ query commentGet($commentGetInput: CommentGetInput!) {
         name
         createdAt
       }
-      createdAt
-      id
     }
     children {
+      __typename
       id
+      body
+      createdAt
+      author {
+        __typename
+        id
+        profileImage
+        name
+        createdAt
+      }
+      children {
+        __typename
+        id
+        body
+        createdAt
+        author {
+          __typename
+          id
+          profileImage
+          name
+          createdAt
+        }
+      }
+      parentId
     }
   }
 }

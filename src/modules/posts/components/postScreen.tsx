@@ -14,15 +14,28 @@ export type ScreenProps = {
   loading: boolean;
   showShimmer: boolean;
   onRefresh(): void;
+  onCommentClick(commentId: string): void;
 };
 
 export type CommentProps = {
   comment: Comment;
   post: Post;
+  onCommentClick(commentId: string): void;
 };
 
-export const CommentListItem = ({ post, comment }: CommentProps) => {
-  return <CommentCard item={comment} onVote={null} />;
+export const CommentListItem = ({
+  post,
+  comment,
+  onCommentClick,
+}: CommentProps) => {
+  return (
+    <CommentCard
+      item={comment}
+      onVote={null}
+      onClick={onCommentClick}
+      isRootComment={false}
+    />
+  );
 };
 
 export const PostScreen = ({
@@ -30,20 +43,21 @@ export const PostScreen = ({
   showShimmer,
   loading,
   onRefresh,
+  onCommentClick,
 }: ScreenProps) => {
   return (
     <Screen showBackButton style={styles.screen}>
       <View style={styles.container}>
-        {showShimmer ? (
-          <View style={styles.shimmerContainer}>
-            <ShimmerCard />
-          </View>
-        ) : null}
+        {showShimmer ? <ShimmerCard /> : null}
         {!showShimmer && post ? (
           <FlashList
-            data={post.comments}
+            data={post.comments.filter(c => c.parentId === null)}
             renderItem={({ item }) => (
-              <CommentListItem post={post} comment={item} />
+              <CommentListItem
+                post={post}
+                comment={item}
+                onCommentClick={onCommentClick}
+              />
             )}
             ListEmptyComponent={
               <Text style={styles.noComments}>Be the first to comment</Text>
@@ -68,9 +82,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  list: {
-    padding: Theme.padding.P4,
-  },
+  list: {},
   listItem: {
     padding: Theme.padding.P4,
     borderRadius: Theme.padding.P2,

@@ -79,9 +79,8 @@ export const PostCard = ({ item, onClick, onVote }: CardProps) => {
 
 const styles = StyleSheet.create({
   card: {
-    height: 250,
+    minHeight: 250,
     padding: Theme.padding.P4,
-    borderRadius: Theme.padding.P2,
     marginBottom: Theme.padding.P5,
     backgroundColor: Theme.color.white,
     shadowOffset: { width: 0, height: 1 },

@@ -9,7 +9,7 @@ import { setFeed } from "../../store/feed/actions/setFeed";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { useVotePost } from "../posts/hooks/useUpvotePost";
 import { VotePayload } from "../posts/components/postCard";
-import { updatePostAfterVoting } from "../../store/feed/actions/updatePostAfterVoting";
+import { updatePostAfterVoting } from "../../store/post/actions/updatePostAfterVoting";
 import { Post } from "../posts/types/post";
 
 export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {

@@ -1,45 +1,96 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { createRef, useRef } from "react";
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { Screen } from "../../../components/Screen/screen";
 import { Theme } from "../../../shared/theme";
-import { FlashList } from "@shopify/flash-list";
-import { Card } from "../../posts/components/postCard";
+import { FlashList, MasonryFlashListRef } from "@shopify/flash-list";
+import { PostCard } from "../../posts/components/postCard";
 import { ShimmerCard } from "../../feed/components/shimmerCard";
 import { Post } from "../../posts/types/post";
 import { Comment } from "../types/comment";
+import { CommentCard } from "./commentCard";
 
 export type ScreenProps = {
+  path: Comment[];
   post: Post;
   comment: Comment;
   loading: boolean;
+  showShimmer: boolean;
+  onRefresh(): void;
+  onCommentClick(commentId: string): void;
 };
 
-export const CommentListItem = ({ node }: CommentProps) => {
+export type CommentProps = {
+  rootComment: Comment;
+  comment: Comment;
+  onCommentClick(commentId: string): void;
+};
+
+export const CommentListItem = ({
+  rootComment,
+  comment,
+  onCommentClick,
+}: CommentProps) => {
+  const isRootComment = comment.id === rootComment.id;
   return (
-    <>
-      <View style={styles.listItem}>
-        <Text>{node.body}</Text>
-      </View>
-    </>
+    <CommentCard
+      item={comment}
+      onVote={null}
+      isRootComment={isRootComment}
+      onClick={onCommentClick}
+    />
   );
 };
 
-export const CommentScreen = ({ post, comment, loading }: ScreenProps) => {
+export const CommentScreen = ({
+  path,
+  post,
+  comment,
+  loading,
+  onCommentClick,
+  onRefresh,
+  showShimmer,
+}: ScreenProps) => {
+  const scrollViewRef = useRef<FlashList<Comment>>(null);
+  if (!showShimmer && post && comment) {
+    const timeout = setTimeout(() => {
+      scrollViewRef.current.scrollToIndex({
+        index: path.length - 1,
+        animated: true,
+      });
+      clearTimeout(timeout);
+    }, 500);
+  }
+
   return (
     <Screen showBackButton style={styles.screen}>
       <View style={styles.container}>
-        {loading ? (
-          <View style={styles.shimmerContainer}>
-            <ShimmerCard />
-          </View>
-        ) : null}
-        {!loading && post && comment ? (
+        {showShimmer ? <ShimmerCard /> : null}
+        {!showShimmer && post && comment ? (
           <FlashList
-            data={comment.}
-            renderItem={({ item }) => <CommentListItem node={item} />}
+            ref={scrollViewRef}
+            data={path.concat(comment.children || [])}
+            renderItem={({ item }) => (
+              <CommentListItem
+                rootComment={comment}
+                comment={item}
+                onCommentClick={onCommentClick}
+              />
+            )}
             estimatedItemSize={200}
             contentContainerStyle={styles.list}
-            ListHeaderComponent={<Card item={post} onVote={null} />}
+            ListEmptyComponent={
+              <Text style={styles.noComments}>Be the first to comment</Text>
+            }
+            ListHeaderComponent={<PostCard item={post} onVote={null} />}
+            refreshControl={
+              <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+            }
           />
         ) : null}
       </View>
@@ -55,7 +106,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   list: {
-    padding: Theme.padding.P4,
     backgroundColor: Theme.color.lightGray,
   },
   listItem: {
@@ -71,5 +121,8 @@ const styles = StyleSheet.create({
   },
   shimmerContainer: {
     padding: Theme.padding.P4,
+  },
+  noComments: {
+    textAlign: "center",
   },
 });
