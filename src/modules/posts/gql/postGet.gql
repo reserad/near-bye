@@ -11,6 +11,7 @@ query postGet($postGetInput: PostGetInput!) {
       name
       profileImage
       createdAt
+      phoneNumber
     }
     comments {
       __typename
@@ -20,6 +21,7 @@ query postGet($postGetInput: PostGetInput!) {
         profileImage
         name
         createdAt
+        phoneNumber
       }
       body
       createdAt
@@ -36,6 +38,7 @@ query postGet($postGetInput: PostGetInput!) {
           name
           profileImage
           createdAt
+          phoneNumber
         }
         createdAt
         id
@@ -51,6 +54,7 @@ query postGet($postGetInput: PostGetInput!) {
           profileImage
           name
           createdAt
+          phoneNumber
         }
         parentId
       }

@@ -7,6 +7,8 @@ import { useNewDispatch } from "../../store/hooks/useNewDispatch";
 import { setPost } from "../../store/post/actions/setPost";
 import { useNewSelector } from "../../store/hooks/useNewSelector";
 import { getLastVisitedPost } from "./selectors/getLastVisitedPost";
+import { convertFlatArrayToTreeNodes } from "../comments/utils/convertFlatArrayToTreeNodes";
+import { TreeNode } from "../comments/types/treeNode";
 
 export const PostContainer = ({
   navigation,
@@ -19,11 +21,16 @@ export const PostContainer = ({
   const [loading, setLoading] = useState(true);
   const [hasCompletedFirstLoad, setHasCompletedFirstLoad] =
     useState<boolean>(false);
+  const [treeNodes, setTreeNodes] = useState<TreeNode[]>([]);
 
   const fetchPost = useCallback(async () => {
     try {
       setLoading(true);
       const fetchedPost = await getPost(postId);
+      const commentTreeNodes = convertFlatArrayToTreeNodes(
+        fetchedPost.comments,
+      );
+      setTreeNodes(commentTreeNodes);
       dispatch(setPost(fetchedPost));
     } catch (er) {
       Toast.show({
@@ -58,6 +65,7 @@ export const PostContainer = ({
   return (
     <PostScreen
       post={post}
+      commentTreeNodes={treeNodes}
       loading={loading}
       onRefresh={fetchPost}
       showShimmer={!hasCompletedFirstLoad}

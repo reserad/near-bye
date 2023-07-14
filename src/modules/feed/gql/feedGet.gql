@@ -12,6 +12,7 @@ query feedGet($feedGetInput: FeedGetInput!) {
       name
       profileImage
       createdAt
+      phoneNumber
     }
     comments {
       __typename
@@ -24,6 +25,7 @@ query feedGet($feedGetInput: FeedGetInput!) {
         profileImage
         name
         createdAt
+        phoneNumber
       }
       parentId
       children {

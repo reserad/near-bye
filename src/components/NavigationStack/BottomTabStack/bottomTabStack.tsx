@@ -4,7 +4,6 @@ import { BottomTabStackParamList } from "../../../navigation/types";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AccountContainer } from "../../../modules/account/accountContainer";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
 export const BottomTabStack = () => {
   const Tab = createBottomTabNavigator<BottomTabStackParamList>();
   return (

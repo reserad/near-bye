@@ -10,6 +10,7 @@ query commentGet($commentGetInput: CommentGetInput!) {
       profileImage
       name
       createdAt
+      phoneNumber
     }
     parentId
     parent {
@@ -24,6 +25,7 @@ query commentGet($commentGetInput: CommentGetInput!) {
         profileImage
         name
         createdAt
+        phoneNumber
       }
     }
     children {
@@ -37,6 +39,7 @@ query commentGet($commentGetInput: CommentGetInput!) {
         profileImage
         name
         createdAt
+        phoneNumber
       }
       children {
         __typename
@@ -49,6 +52,7 @@ query commentGet($commentGetInput: CommentGetInput!) {
           profileImage
           name
           createdAt
+          phoneNumber
         }
       }
       parentId

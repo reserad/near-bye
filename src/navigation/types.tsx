@@ -15,7 +15,6 @@ export type MainStackParamList = {
   Post: { postId: string };
   BottomTabs: NavigatorScreenParams<BottomTabStackParamList>;
   Comment: { commentId: string; postId: string };
-  Test: undefined;
 };
 
 export type BottomTabStackParamList = {

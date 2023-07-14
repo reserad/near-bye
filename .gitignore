@@ -70,3 +70,7 @@ ios/NearBye.xcodeproj/project.xcworkspace/
 /node_modules
 
 .env
+# Expo
+.expo
+dist/
+web-build/
