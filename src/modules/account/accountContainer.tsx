@@ -3,8 +3,6 @@ import { signOut } from "../../store/user/actions/signOut";
 import { BottomTabStackProps } from "../../navigation/types";
 import { useCallback, useEffect, useState } from "react";
 import { useGetUser } from "../users/hooks/useGetUser";
-import { useNewSelector } from "../../store/hooks/useNewSelector";
-import { getCurrentUser } from "../users/selectors/getCurrentUser";
 import { setUser } from "../../store/user/actions/setUser";
 import { launchImageLibrary } from "react-native-image-picker";
 import { uploadImage } from "../../s3/client";
@@ -20,7 +18,6 @@ export const AccountContainer = ({
   const dispatch = useNewDispatch();
   const [updatingUser, setUpdatingUser] = useState<boolean>(false);
   const [uploadingImage, setUploadingImage] = useState<boolean>(false);
-  const { name, profileImage } = useNewSelector(getCurrentUser);
   const { getUser } = useGetUser();
   const { updateUser } = useUpdateUser();
 
@@ -57,7 +54,7 @@ export const AccountContainer = ({
       setUpdatingUser(false);
       dispatch(setUser(updatedUser));
     },
-    [updateUser, name],
+    [updateUser],
   );
 
   const fetchUser = async () => {
