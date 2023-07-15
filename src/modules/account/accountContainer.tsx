@@ -5,13 +5,6 @@ import { useNewDispatch } from "../../store/hooks/useNewDispatch";
 import { signOut } from "../../store/user/actions/signOut";
 import { BottomTabStackProps } from "../../navigation/types";
 import { Theme } from "../../shared/theme";
-import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import { client } from "../../s3/client";
-import {
-  CreateBucketCommand,
-  PutObjectCommand,
-  UploadPartCommand,
-} from "@aws-sdk/client-s3";
 import { useEffect } from "react";
 import { useGetUser } from "../users/hooks/useGetUser";
 import { useNewSelector } from "../../store/hooks/useNewSelector";

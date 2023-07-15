@@ -1,12 +1,15 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Theme } from "../../shared/theme";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { IconProps } from "react-native-vector-icons/Icon";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export type FABProps = {
   color?: string;
-  icon?: IconProps;
+  icon?: {
+    name: "plus";
+    size: number;
+    color: string;
+  };
   onPress(): void;
 };
 

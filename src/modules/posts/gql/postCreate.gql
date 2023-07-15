@@ -12,6 +12,7 @@ mutation postCreate($postCreateInput: PostCreateInput!) {
       profileImage
       createdAt
       name
+      phoneNumber
     }
   }
 }

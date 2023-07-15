@@ -3,8 +3,8 @@ import { Theme } from "../../../shared/theme";
 import { formatDate } from "../../feed/utils/formatDate";
 import { VoteButton, VoteButtonType } from "../../feed/components/voteButton";
 import { VoteStatus, VoteType } from "../../../gql/graphql";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { TreeNode } from "../types/treeNode";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export type CardProps = {
   item: TreeNode;

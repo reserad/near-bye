@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TreeNode } from "../types/treeNode";
 import {
   Animated,
@@ -7,11 +7,16 @@ import {
   Text,
   TouchableOpacity,
   View,
+  findNodeHandle,
 } from "react-native";
 import { Theme } from "../../../shared/theme";
 import * as Haptics from "expo-haptics";
 import { CommentCard } from "./commentCard";
-import { FlashList } from "@shopify/flash-list";
+import {
+  AnimatedFlashList,
+  FlashList,
+  ListRenderItemInfo,
+} from "@shopify/flash-list";
 import { PostCard } from "../../posts/components/postCard";
 import { Post } from "../../posts/types/post";
 
@@ -27,15 +32,45 @@ const colors = [
   "#FF4500",
 ];
 
-const Node = ({ node, depth }: { node: TreeNode; depth: number }) => {
-  const [visible, setVisible] = useState(() => depth === 0);
-  const fadeAnim = useRef(new Animated.Value(depth === 0 ? 1 : 0)).current;
+const ANIMATION_DURATION = 300;
+
+const Node = ({
+  node,
+  depth,
+  rootScrollRef,
+}: {
+  node: TreeNode;
+  depth: number;
+  rootScrollRef: React.MutableRefObject<FlashList<TreeNode>>;
+}) => {
+  const [visible, setVisible] = useState(true);
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const viewRef = useRef<View>(null);
+  const [offset, setOffset] = useState(0);
+
+  useEffect(() => {
+    if (viewRef?.current) {
+      const node = findNodeHandle(rootScrollRef.current);
+      if (node) {
+        viewRef.current.measureLayout(
+          node,
+          (_left, top, _width, _height) => {
+            setOffset(top);
+          },
+          () => {
+            return;
+          },
+        );
+      }
+    }
+  }, [viewRef, rootScrollRef]);
+
   const nodes = node.children;
 
   const fadeIn = () => {
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 200,
+      duration: ANIMATION_DURATION,
       useNativeDriver: true,
     }).start();
     setVisible(true);
@@ -44,7 +79,7 @@ const Node = ({ node, depth }: { node: TreeNode; depth: number }) => {
   const fadeOut = () => {
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 200,
+      duration: ANIMATION_DURATION,
       useNativeDriver: true,
     }).start(() => {
       setVisible(false);
@@ -55,8 +90,22 @@ const Node = ({ node, depth }: { node: TreeNode; depth: number }) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     if (visible) {
       fadeOut();
+      const timeout = setTimeout(() => {
+        rootScrollRef.current.scrollToOffset({
+          animated: true,
+          offset: offset,
+        });
+        clearTimeout(timeout);
+      }, ANIMATION_DURATION);
     } else {
       fadeIn();
+      const timeout = setTimeout(() => {
+        rootScrollRef.current.scrollToOffset({
+          animated: true,
+          offset: offset,
+        });
+        clearTimeout(timeout);
+      }, ANIMATION_DURATION);
     }
   };
 
@@ -66,7 +115,9 @@ const Node = ({ node, depth }: { node: TreeNode; depth: number }) => {
         disabled={nodes.length === 0}
         onLongPress={handleLongPress}
         activeOpacity={0.75}>
-        <CommentCard item={node} onVote={null} />
+        <View ref={viewRef}>
+          <CommentCard item={node} onVote={null} />
+        </View>
       </TouchableOpacity>
       {visible && nodes.length > 0 ? (
         <Animated.View
@@ -83,10 +134,18 @@ const Node = ({ node, depth }: { node: TreeNode; depth: number }) => {
                 marginStart: Theme.padding.P4,
               }}
             />
-            <FlashList
+            <AnimatedFlashList
               data={node.children}
-              renderItem={({ item }) => <Node node={item} depth={depth + 1} />}
+              renderItem={({ item }: ListRenderItemInfo<TreeNode>) => (
+                <Node
+                  node={item}
+                  depth={depth + 1}
+                  rootScrollRef={rootScrollRef}
+                />
+              )}
               estimatedItemSize={200}
+              keyExtractor={(item: TreeNode) => item.id}
+              scrollEnabled
             />
           </View>
         </Animated.View>
@@ -103,10 +162,14 @@ type NodeTreeProps = {
 };
 
 export const NodeTree = ({ post, tree, loading, onRefresh }: NodeTreeProps) => {
+  const scrollViewRef = useRef<FlashList<TreeNode>>(null);
   return (
-    <FlashList
+    <AnimatedFlashList
+      ref={scrollViewRef}
       data={tree}
-      renderItem={({ item }) => <Node node={item} depth={0} />}
+      renderItem={({ item }: ListRenderItemInfo<TreeNode>) => (
+        <Node node={item} depth={0} rootScrollRef={scrollViewRef} />
+      )}
       estimatedItemSize={500}
       ListHeaderComponent={<PostCard item={post} onVote={null} />}
       ListEmptyComponent={
@@ -115,6 +178,7 @@ export const NodeTree = ({ post, tree, loading, onRefresh }: NodeTreeProps) => {
       refreshControl={
         <RefreshControl refreshing={loading} onRefresh={onRefresh} />
       }
+      keyExtractor={item => item.id}
     />
   );
 };

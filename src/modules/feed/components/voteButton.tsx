@@ -1,9 +1,8 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, View, ViewProps } from "react-native";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import { IconProps } from "react-native-vector-icons/Icon";
 import { Theme } from "../../../shared/theme";
 import { VoteStatus } from "../../../gql/graphql";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export interface VoteButtonProps extends ViewProps {
   type: VoteButtonType;
@@ -38,7 +37,7 @@ export const VoteButton = ({
         return Theme.color.darkGray;
     }
   };
-  const iconProps: IconProps = {
+  const iconProps = {
     name: type,
     size: 20,
     color: getArrowColor(),
