@@ -11,6 +11,9 @@ const initialState: UserState = {
   },
   phoneNumber: "",
   profileImage: "",
+  name: "",
+  baseLatitude: null,
+  baseLongitude: null,
   isAuthenticated: false,
 };
 
@@ -37,9 +40,13 @@ export const UserReducer = (
         ...initialState,
       };
     case ActionType.USER_SET:
+      const fetchedUser = action.payload;
       return {
         ...state,
-        profileImage: action.payload.profileImage,
+        profileImage: fetchedUser.profileImage,
+        name: fetchedUser.name,
+        baseLatitude: fetchedUser.baseLatitude,
+        baseLongitude: fetchedUser.baseLongitude,
       };
     default:
       return state;

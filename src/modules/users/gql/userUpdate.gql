@@ -1,0 +1,10 @@
+mutation userUpdate($userUpdateInput: UserUpdateInput!) {
+  userUpdate(userUpdateInput: $userUpdateInput) {
+    __typename
+    id
+    name
+    createdAt
+    phoneNumber
+    profileImage
+  }
+}
