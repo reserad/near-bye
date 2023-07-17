@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   FlatList,
-  Image,
   LayoutAnimation,
   ScrollView,
   StyleSheet,
@@ -16,6 +15,7 @@ import { Theme } from "../../../shared/theme";
 import { Asset, launchImageLibrary } from "react-native-image-picker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { uploadImage } from "../../../s3/client";
+import FastImage from "react-native-fast-image";
 
 export type CreatePostProps = {
   onSubmit(payload: CreatePostPayload): void;
@@ -59,9 +59,9 @@ const ImageCard = ({
             size={28}
           />
         </TouchableOpacity>
-        <Image
-          source={{ uri: item.uri, width: cardSize, height: cardSize }}
-          style={styles.imageCard}
+        <FastImage
+          source={{ uri: item.uri }}
+          style={[styles.imageCard, { width: cardSize, height: cardSize }]}
         />
       </View>
     </TouchableWithoutFeedback>

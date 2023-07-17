@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Theme } from "../../../shared/theme";
 import { formatDate } from "../../feed/utils/formatDate";
 import { VoteButton, VoteButtonType } from "../../feed/components/voteButton";
@@ -6,6 +6,7 @@ import { VoteType } from "../../../gql/graphql";
 import { Post } from "../types/post";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { PostBody } from "../types/post-body";
+import FastImage from "react-native-fast-image";
 
 export type CardProps = {
   item: Post;
@@ -36,7 +37,7 @@ export const PostCard = ({
         <View style={styles.header}>
           <View style={styles.authorPicture}>
             {author.profileImage ? (
-              <Image
+              <FastImage
                 source={{
                   uri: author.profileImage,
                 }}
@@ -68,13 +69,15 @@ export const PostCard = ({
                     }}
                     onPress={() => onShowImageModal(imageUrls, index)}>
                     <View>
-                      <Image
+                      <FastImage
                         source={{
                           uri,
+                        }}
+                        style={{
+                          borderRadius: Theme.padding.P3,
                           width: imageUrls.length > 1 ? 150 : 300,
                           height: imageUrls.length > 1 ? 150 : 300,
                         }}
-                        style={{ borderRadius: Theme.padding.P3 }}
                       />
                     </View>
                   </TouchableOpacity>

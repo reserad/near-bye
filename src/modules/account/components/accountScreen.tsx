@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNewSelector } from "../../../store/hooks/useNewSelector";
 import { getCurrentUser } from "../../users/selectors/getCurrentUser";
 import { Screen } from "../../../components/Screen/screen";
@@ -8,6 +8,7 @@ import { TextField } from "../../../components/TextField/textField";
 import { Theme } from "../../../shared/theme";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../../../components/Button/button";
+import FastImage from "react-native-fast-image";
 
 export type AccountScreenPayload = {
   name: string;
@@ -45,7 +46,7 @@ export const AccountScreen = ({
             <TouchableOpacity activeOpacity={0.6} onPress={onProfilePress}>
               <View style={styles.profilePicture}>
                 {profileImage ? (
-                  <Image
+                  <FastImage
                     source={{
                       uri: profileImage,
                     }}

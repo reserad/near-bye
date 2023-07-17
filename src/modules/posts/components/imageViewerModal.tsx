@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import {
   Dimensions,
   FlatList,
-  Image,
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -11,18 +10,18 @@ import {
 import { Theme } from "../../../shared/theme";
 import { MainStackProps } from "../../../navigation/types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import FastImage from "react-native-fast-image";
 
 const ImageItem = ({ uri }: { uri: string }) => {
   const imageWidth = Dimensions.get("screen").width;
   return (
     <TouchableWithoutFeedback>
       <View>
-        <Image
+        <FastImage
           source={{
             uri,
-            width: imageWidth,
-            height: imageWidth * (3 / 4),
           }}
+          style={{ width: imageWidth, height: imageWidth * (3 / 4) }}
         />
       </View>
     </TouchableWithoutFeedback>

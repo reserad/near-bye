@@ -1,10 +1,11 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Theme } from "../../../shared/theme";
 import { formatDate } from "../../feed/utils/formatDate";
 import { VoteButton, VoteButtonType } from "../../feed/components/voteButton";
 import { VoteStatus, VoteType } from "../../../gql/graphql";
 import { TreeNode } from "../types/treeNode";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import FastImage from "react-native-fast-image";
 
 export type CardProps = {
   item: TreeNode;
@@ -99,7 +100,7 @@ export const CommentCard = ({ item, onVote }: CardProps) => {
         <View style={styles.header}>
           <View style={styles.authorPicture}>
             {author.profileImage ? (
-              <Image
+              <FastImage
                 source={{
                   uri: author.profileImage,
                 }}
