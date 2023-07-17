@@ -15,6 +15,7 @@ export type ScreenProps = {
   showShimmer: boolean;
   onRefresh(): void;
   onCommentClick(commentId: string): void;
+  onShowImageModal(imageUris: string[], index: number): void;
 };
 
 export type CommentProps = {
@@ -29,6 +30,7 @@ export const PostScreen = ({
   showShimmer,
   loading,
   onRefresh,
+  onShowImageModal,
 }: ScreenProps) => {
   return (
     <Screen showBackButton style={styles.screen}>
@@ -40,6 +42,7 @@ export const PostScreen = ({
             tree={commentTreeNodes}
             loading={loading}
             onRefresh={onRefresh}
+            onShowImageModal={onShowImageModal}
           />
         ) : null}
       </View>

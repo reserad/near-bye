@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { CreatePostContainer } from "../../../modules/posts/createPostContainer";
 import { BottomTabStack } from "../BottomTabStack/bottomTabStack";
 import { PostContainer } from "../../../modules/posts/postContainer";
+import { ImageViewerModal } from "../../../modules/posts/components/imageViewerModal";
 
 export const MainStack = () => {
   const Stack = createStackNavigator<MainStackParamList>();
@@ -15,6 +16,13 @@ export const MainStack = () => {
       <Stack.Screen name="BottomTabs" component={BottomTabStack} />
       <Stack.Screen name="CreatePost" component={CreatePostContainer} />
       <Stack.Screen name="Post" component={PostContainer} />
+      <Stack.Screen
+        name="Media"
+        component={ImageViewerModal}
+        options={{
+          presentation: "modal",
+        }}
+      />
     </Stack.Navigator>
   );
 };

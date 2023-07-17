@@ -15,6 +15,7 @@ export type MainStackParamList = {
   Post: { postId: string };
   BottomTabs: NavigatorScreenParams<BottomTabStackParamList>;
   Comment: { commentId: string; postId: string };
+  Media: { uris: string[]; startingIndex: number };
 };
 
 export type BottomTabStackParamList = {

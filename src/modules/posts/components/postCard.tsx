@@ -3,13 +3,15 @@ import { Theme } from "../../../shared/theme";
 import { formatDate } from "../../feed/utils/formatDate";
 import { VoteButton, VoteButtonType } from "../../feed/components/voteButton";
 import { VoteType } from "../../../gql/graphql";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Post } from "../types/post";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { PostBody } from "../types/post-body";
 
 export type CardProps = {
   item: Post;
   onClick?(): void;
   onVote(payload: VotePayload): void;
+  onShowImageModal(imageUris: string[], index: number): void;
 };
 
 export type VotePayload = {
@@ -17,8 +19,14 @@ export type VotePayload = {
   voteType: VoteType;
 };
 
-export const PostCard = ({ item, onClick, onVote }: CardProps) => {
+export const PostCard = ({
+  item,
+  onClick,
+  onVote,
+  onShowImageModal,
+}: CardProps) => {
   const { body, author, score, createdAt, userVoteStatus, comments } = item;
+  const { text, imageUrls }: PostBody = JSON.parse(body);
   return (
     <TouchableOpacity
       activeOpacity={0.5}
@@ -41,7 +49,39 @@ export const PostCard = ({ item, onClick, onVote }: CardProps) => {
         </View>
 
         <View style={styles.bodyContainer}>
-          <Text style={styles.body}>{body}</Text>
+          <Text style={styles.bodyText}>{text}</Text>
+          {imageUrls && imageUrls.length > 0 ? (
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+              }}>
+              {imageUrls.map((uri, index) => {
+                return (
+                  <TouchableOpacity
+                    key={uri}
+                    style={{
+                      width: imageUrls.length > 1 ? 160 : 320,
+                      height: imageUrls.length > 1 ? 160 : 320,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    onPress={() => onShowImageModal(imageUrls, index)}>
+                    <View>
+                      <Image
+                        source={{
+                          uri,
+                          width: imageUrls.length > 1 ? 150 : 300,
+                          height: imageUrls.length > 1 ? 150 : 300,
+                        }}
+                        style={{ borderRadius: Theme.padding.P3 }}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          ) : null}
         </View>
         <View style={styles.footerContainer}>
           <View style={styles.vote}>
@@ -93,12 +133,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexWrap: "wrap",
   },
-  body: {},
+  bodyText: {
+    marginBottom: Theme.padding.P2,
+  },
   bodyContainer: {
     flex: 1,
-    borderRadius: Theme.padding.P2,
-    backgroundColor: Theme.color.purpleDesaturated,
-    padding: Theme.padding.P4,
   },
   authorPicture: {
     backgroundColor: Theme.color.purple,

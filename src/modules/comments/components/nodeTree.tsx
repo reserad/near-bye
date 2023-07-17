@@ -159,9 +159,16 @@ type NodeTreeProps = {
   tree: TreeNode[];
   loading: boolean;
   onRefresh(): void;
+  onShowImageModal(imageUris: string[], index: number): void;
 };
 
-export const NodeTree = ({ post, tree, loading, onRefresh }: NodeTreeProps) => {
+export const NodeTree = ({
+  post,
+  tree,
+  loading,
+  onRefresh,
+  onShowImageModal,
+}: NodeTreeProps) => {
   const scrollViewRef = useRef<FlashList<TreeNode>>(null);
   return (
     <AnimatedFlashList
@@ -171,7 +178,13 @@ export const NodeTree = ({ post, tree, loading, onRefresh }: NodeTreeProps) => {
         <Node node={item} depth={0} rootScrollRef={scrollViewRef} />
       )}
       estimatedItemSize={500}
-      ListHeaderComponent={<PostCard item={post} onVote={null} />}
+      ListHeaderComponent={
+        <PostCard
+          item={post}
+          onVote={null}
+          onShowImageModal={onShowImageModal}
+        />
+      }
       ListEmptyComponent={
         <Text style={styles.noComments}>Be the first to comment</Text>
       }

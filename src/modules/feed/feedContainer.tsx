@@ -75,6 +75,16 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
     }
   }, []);
 
+  const showImageModal = (uris: string[], startingIndex: number) => {
+    navigation.navigate("MainStack", {
+      screen: "Media",
+      params: {
+        startingIndex,
+        uris,
+      },
+    });
+  };
+
   return (
     <FeedScreen
       feed={userFeed}
@@ -84,6 +94,7 @@ export const FeedContainer = ({ navigation }: BottomTabStackProps<"Feed">) => {
       onCardPress={handleCardPress}
       onVote={handleVote}
       showShimmer={!hasCompletedFirstLoad}
+      onShowImageModal={showImageModal}
     />
   );
 };

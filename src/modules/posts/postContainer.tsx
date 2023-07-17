@@ -59,6 +59,16 @@ export const PostContainer = ({
     [navigation],
   );
 
+  const showImageModal = (uris: string[], startingIndex: number) => {
+    navigation.navigate("MainStack", {
+      screen: "Media",
+      params: {
+        startingIndex,
+        uris,
+      },
+    });
+  };
+
   useEffect(() => {
     fetchPost();
   }, []);
@@ -70,6 +80,7 @@ export const PostContainer = ({
       onRefresh={fetchPost}
       showShimmer={!hasCompletedFirstLoad}
       onCommentClick={onCommentClick}
+      onShowImageModal={showImageModal}
     />
   );
 };

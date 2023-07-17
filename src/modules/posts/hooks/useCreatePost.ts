@@ -14,13 +14,14 @@ export const useCreatePost = () => {
     async (payload: CreatePostPayload) => {
       console.info("PostCreate mutation started");
       try {
-        const { body } = payload;
+        const { body, imageUrls } = payload;
         const { latitude, longitude } = await getCoordinates();
         const { data, errors } = await client.mutate({
           mutation: PostCreateDocument,
           variables: {
             postCreateInput: {
               body,
+              imageUrls,
               userId,
               latitude,
               longitude,

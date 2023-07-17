@@ -14,6 +14,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: { input: any; output: any; }
 };
 
 export type Comment = {
@@ -109,7 +111,7 @@ export type OtpVerifyUser = {
 export type Post = {
   __typename?: 'Post';
   author: User;
-  body: Scalars['String']['output'];
+  body: Scalars['JSON']['output'];
   comments: Array<Comment>;
   createdAt: Scalars['String']['output'];
   id: Scalars['String']['output'];
@@ -119,7 +121,8 @@ export type Post = {
 };
 
 export type PostCreateInput = {
-  body: Scalars['String']['input'];
+  body: Scalars['JSON']['input'];
+  imageUrls?: InputMaybe<Array<Scalars['String']['input']>>;
   latitude: Scalars['Float']['input'];
   longitude: Scalars['Float']['input'];
   userId: Scalars['String']['input'];
@@ -174,7 +177,7 @@ export type UserPost = {
   __typename?: 'UserPost';
   author: User;
   authorId: Scalars['String']['output'];
-  body: Scalars['String']['output'];
+  body: Scalars['JSON']['output'];
   comments: Array<Comment>;
   createdAt: Scalars['String']['output'];
   id: Scalars['String']['output'];
@@ -238,21 +241,21 @@ export type FeedGetQueryVariables = Exact<{
 }>;
 
 
-export type FeedGetQuery = { __typename?: 'Query', feedGet: Array<{ __typename: 'UserPost', id: string, body: string, createdAt: string, userVoteStatus: VoteStatus, score: number, author: { __typename: 'User', id: string, name?: string | null, profileImage?: string | null, createdAt: string, phoneNumber: string }, comments: Array<{ __typename: 'Comment', id: string, body: string, createdAt: string, parentId?: string | null, author: { __typename: 'User', id: string, profileImage?: string | null, name?: string | null, createdAt: string, phoneNumber: string }, children?: Array<{ __typename?: 'Comment', id: string }> | null }> }> };
+export type FeedGetQuery = { __typename?: 'Query', feedGet: Array<{ __typename: 'UserPost', id: string, body: any, createdAt: string, userVoteStatus: VoteStatus, score: number, author: { __typename: 'User', id: string, name?: string | null, profileImage?: string | null, createdAt: string, phoneNumber: string }, comments: Array<{ __typename: 'Comment', id: string, body: string, createdAt: string, parentId?: string | null, author: { __typename: 'User', id: string, profileImage?: string | null, name?: string | null, createdAt: string, phoneNumber: string }, children?: Array<{ __typename?: 'Comment', id: string }> | null }> }> };
 
 export type PostCreateMutationVariables = Exact<{
   postCreateInput: PostCreateInput;
 }>;
 
 
-export type PostCreateMutation = { __typename?: 'Mutation', postCreate: { __typename: 'Post', id: string, body: string, createdAt: string, latitude?: number | null, longitude?: number | null, author: { __typename: 'User', id: string, profileImage?: string | null, createdAt: string, name?: string | null, phoneNumber: string } } };
+export type PostCreateMutation = { __typename?: 'Mutation', postCreate: { __typename: 'Post', id: string, body: any, createdAt: string, latitude?: number | null, longitude?: number | null, author: { __typename: 'User', id: string, profileImage?: string | null, createdAt: string, name?: string | null, phoneNumber: string } } };
 
 export type PostGetQueryVariables = Exact<{
   postGetInput: PostGetInput;
 }>;
 
 
-export type PostGetQuery = { __typename?: 'Query', postGet: { __typename: 'UserPost', id: string, body: string, createdAt: string, userVoteStatus: VoteStatus, score: number, author: { __typename: 'User', id: string, name?: string | null, profileImage?: string | null, createdAt: string, phoneNumber: string }, comments: Array<{ __typename: 'Comment', body: string, createdAt: string, id: string, parentId?: string | null, author: { __typename: 'User', id: string, profileImage?: string | null, name?: string | null, createdAt: string, phoneNumber: string }, parent?: { __typename: 'Comment', id: string, parentId?: string | null, body: string, createdAt: string, author: { __typename: 'User', id: string, name?: string | null, profileImage?: string | null, createdAt: string, phoneNumber: string } } | null, children?: Array<{ __typename: 'Comment', id: string, body: string, createdAt: string, parentId?: string | null, author: { __typename: 'User', id: string, profileImage?: string | null, name?: string | null, createdAt: string, phoneNumber: string } }> | null }> } };
+export type PostGetQuery = { __typename?: 'Query', postGet: { __typename: 'UserPost', id: string, body: any, createdAt: string, userVoteStatus: VoteStatus, score: number, author: { __typename: 'User', id: string, name?: string | null, profileImage?: string | null, createdAt: string, phoneNumber: string }, comments: Array<{ __typename: 'Comment', body: string, createdAt: string, id: string, parentId?: string | null, author: { __typename: 'User', id: string, profileImage?: string | null, name?: string | null, createdAt: string, phoneNumber: string }, parent?: { __typename: 'Comment', id: string, parentId?: string | null, body: string, createdAt: string, author: { __typename: 'User', id: string, name?: string | null, profileImage?: string | null, createdAt: string, phoneNumber: string } } | null, children?: Array<{ __typename: 'Comment', id: string, body: string, createdAt: string, parentId?: string | null, author: { __typename: 'User', id: string, profileImage?: string | null, name?: string | null, createdAt: string, phoneNumber: string } }> | null }> } };
 
 export type PostVoteMutationVariables = Exact<{
   postVoteInput: PostVoteInput;

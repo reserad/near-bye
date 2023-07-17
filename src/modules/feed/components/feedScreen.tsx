@@ -25,6 +25,7 @@ interface FeedScreenProps extends ViewProps {
   onFABPress(): void;
   onVote(payload: VotePayload): void;
   onCardPress(item: Post): void;
+  onShowImageModal(imageUris: string[], index: number): void;
   showShimmer: boolean;
 }
 
@@ -43,6 +44,7 @@ export const FeedScreen = ({
   onFABPress,
   onCardPress,
   onVote,
+  onShowImageModal,
   showShimmer,
 }: FeedScreenProps) => {
   const renderCard = useCallback(({ item }: RenderItem) => {
@@ -52,6 +54,7 @@ export const FeedScreen = ({
         item={item}
         onClick={() => onCardPress(item)}
         onVote={onVote}
+        onShowImageModal={onShowImageModal}
       />
     );
   }, []);
