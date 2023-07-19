@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { CreatePostContainer } from "../../../modules/posts/createPostContainer";
 import { BottomTabStack } from "../BottomTabStack/bottomTabStack";
 import { PostContainer } from "../../../modules/posts/postContainer";
-import { ImageViewerModal } from "../../../modules/posts/components/imageViewerModal";
+import { ImageViewerModal } from "../../ImageViewerModal/imageViewerModal";
 
 export const MainStack = () => {
   const Stack = createStackNavigator<MainStackParamList>();

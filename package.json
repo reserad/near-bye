@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "android": "react-native run-android --device",
+    "android:sim": "react-native run-android",
+    "ios": "react-native run-ios --device",
+    "ios:sim": "react-native run-ios",
     "lint": "eslint .",
-    "start-old": "react-native start --reset-cache",
     "test": "jest",
     "generate-gql": "graphql-codegen --config src/codegen/codegen.ts",
-    "start": "npx expo run:ios --device",
+    "expo:ios": "npx expo run:ios --device",
+    "start": "react-native start --reset-cache",
     "postinstall": "patch-package"
   },
   "dependencies": {

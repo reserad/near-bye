@@ -7,8 +7,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { Theme } from "../../../shared/theme";
-import { MainStackProps } from "../../../navigation/types";
+import { Theme } from "../../shared/theme";
+import { MainStackProps } from "../../navigation/types";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import FastImage from "react-native-fast-image";
 

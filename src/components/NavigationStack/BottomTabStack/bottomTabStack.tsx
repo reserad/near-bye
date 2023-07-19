@@ -3,7 +3,7 @@ import { FeedContainer } from "../../../modules/feed/feedContainer";
 import { BottomTabStackParamList } from "../../../navigation/types";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AccountContainer } from "../../../modules/account/accountContainer";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 export const BottomTabStack = () => {
   const Tab = createBottomTabNavigator<BottomTabStackParamList>();
   return (

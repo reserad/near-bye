@@ -3,6 +3,7 @@ export const Theme = {
     white: "white",
     black: "black",
     lightGray: "rgb(245,245,245)",
+    lighterGray: "rgb(230,230,230)",
     mediumGray: "rgb(175,175,175)",
     darkGray: "rgb(75,75,75)",
     purple: "rgb(93,116,222)",
