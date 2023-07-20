@@ -5,6 +5,7 @@ import { CreatePostContainer } from "../../../modules/posts/createPostContainer"
 import { BottomTabStack } from "../BottomTabStack/bottomTabStack";
 import { PostContainer } from "../../../modules/posts/postContainer";
 import { ImageViewerModal } from "../../ImageViewerModal/imageViewerModal";
+import { AccountContainer } from "../../../modules/account/accountContainer";
 
 export const MainStack = () => {
   const Stack = createStackNavigator<MainStackParamList>();
@@ -23,6 +24,7 @@ export const MainStack = () => {
           presentation: "modal",
         }}
       />
+      <Stack.Screen name="Account" component={AccountContainer} />
     </Stack.Navigator>
   );
 };

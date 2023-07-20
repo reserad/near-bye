@@ -69,7 +69,7 @@ export const ImageViewerModal = ({
               });
             });
           }}
-          getItemLayout={(data, index) => ({
+          getItemLayout={(_data, index) => ({
             length: Dimensions.get("screen").width,
             offset: Dimensions.get("screen").width * index,
             index,
@@ -93,8 +93,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: Theme.padding.P12,
     height: Theme.padding.P12,
-    top: 15,
-    right: 15,
+    top: Theme.padding.P4,
+    right: Theme.padding.P4,
     justifyContent: "center",
     alignItems: "center",
   },

@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, ViewProps } from "react-native";
 import { Theme } from "../../../shared/theme";
 
-export const FeedHeader = ({ style }: ViewProps) => {
+export const FeedListHeader = ({ style }: ViewProps) => {
   return (
     <View style={[styles.listHeader, style]}>
       <Text style={styles.listHeaderText}>What's happening near you</Text>

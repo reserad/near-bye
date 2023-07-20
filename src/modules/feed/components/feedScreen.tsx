@@ -4,6 +4,7 @@ import {
   NativeSyntheticEvent,
   RefreshControl,
   StyleSheet,
+  Text,
   TouchableWithoutFeedback,
   View,
   ViewProps,
@@ -20,7 +21,9 @@ import { useNavigation } from "@react-navigation/native";
 import { ProfileButton } from "./profileButton";
 import { SearchButton } from "./searchButton";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { FeedHeader } from "./feedHeader";
+import { FeedListHeader } from "./feedListHeader";
+
+const headerBarHeight = Theme.padding.P15;
 
 interface RenderItem {
   item: Post;
@@ -55,7 +58,6 @@ export const FeedScreen = ({
   const topSlideAnim = useRef(new Animated.Value(0)).current;
   const shrinkAnim = useRef(new Animated.Value(1)).current;
   const isAnimating = useRef(false);
-  const headerHeight = Theme.padding.P15;
   const scrollViewRef = useRef<FlashList<Post>>(null);
 
   const styles = StyleSheet.create({
@@ -66,8 +68,8 @@ export const FeedScreen = ({
     animatedScreen: {
       flex: 1,
     },
-    header: {
-      height: headerHeight + insets.top,
+    headerBar: {
+      height: headerBarHeight + insets.top,
       paddingTop: insets.top,
       paddingHorizontal: Theme.padding.P4,
       justifyContent: "center",
@@ -82,11 +84,20 @@ export const FeedScreen = ({
       borderBottomWidth: 1,
       borderColor: Theme.color.lighterGray,
     },
-    headerChild: {
+    headerBarChild: {
       flex: 1,
       justifyContent: "center",
     },
-    feedHeader: { marginTop: headerHeight + insets.top },
+    feedHeader: { marginTop: headerBarHeight + insets.top },
+    headerBarTitle: {
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    headerBarText: {
+      color: Theme.color.purple,
+      fontSize: Theme.fontSize.medium,
+      fontWeight: "bold",
+    },
   });
 
   const renderCard = useCallback(({ item }: RenderItem) => {
@@ -103,16 +114,26 @@ export const FeedScreen = ({
 
   const hideBottomTab = (animationDuration: number) => {
     isAnimating.current = true;
-    Animated.timing(shrinkAnim, {
-      toValue: 0,
-      duration: animationDuration,
-      useNativeDriver: true,
-    }).start(() => setShowAnimatedContent(false));
-    Animated.timing(bottomSlideAnim, {
-      toValue: 60,
-      duration: animationDuration,
-      useNativeDriver: true,
-    }).start(() => (isAnimating.current = false));
+
+    Animated.parallel(
+      [
+        Animated.timing(shrinkAnim, {
+          toValue: 0,
+          duration: animationDuration,
+          useNativeDriver: true,
+        }),
+        Animated.timing(bottomSlideAnim, {
+          toValue: 60,
+          duration: animationDuration,
+          useNativeDriver: true,
+        }),
+      ],
+      { stopTogether: false },
+    ).start(() => {
+      isAnimating.current = false;
+      setShowAnimatedContent(false);
+    });
+
     navigation.setOptions({
       tabBarStyle: {
         position: "absolute",
@@ -126,16 +147,23 @@ export const FeedScreen = ({
 
   const showBottomTab = (animationDuration: number) => {
     isAnimating.current = true;
-    Animated.timing(shrinkAnim, {
-      toValue: 1,
-      duration: animationDuration,
-      useNativeDriver: true,
-    }).start();
-    Animated.timing(bottomSlideAnim, {
-      toValue: 0,
-      duration: animationDuration,
-      useNativeDriver: true,
-    }).start(() => (isAnimating.current = false));
+
+    Animated.parallel(
+      [
+        Animated.timing(shrinkAnim, {
+          toValue: 1,
+          duration: animationDuration,
+          useNativeDriver: true,
+        }),
+        Animated.timing(bottomSlideAnim, {
+          toValue: 0,
+          duration: animationDuration,
+          useNativeDriver: true,
+        }),
+      ],
+      { stopTogether: false },
+    ).start(() => (isAnimating.current = false));
+
     navigation.setOptions({
       tabBarStyle: {
         position: "absolute",
@@ -150,7 +178,7 @@ export const FeedScreen = ({
   const hideTopTab = (animationDuration: number) => {
     isAnimating.current = true;
     Animated.timing(topSlideAnim, {
-      toValue: -1 * (headerHeight + insets.top),
+      toValue: -1 * (headerBarHeight + insets.top),
       duration: animationDuration,
       useNativeDriver: true,
     }).start(() => (isAnimating.current = false));
@@ -168,17 +196,15 @@ export const FeedScreen = ({
   const handleOnScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
       const animationDuration = 300;
-      const event = e.nativeEvent;
-      if (
-        event.contentOffset.y >= 0 &&
-        event.contentOffset.y !== scrollOffset.current
-      ) {
-        let down = event.contentOffset.y > scrollOffset.current ? true : false;
-        scrollOffset.current = event.contentOffset.y;
+      const {
+        contentOffset: { y: scrolledPosition },
+      } = e.nativeEvent;
+      if (scrolledPosition >= 0 && scrolledPosition !== scrollOffset.current) {
+        let down = scrolledPosition > scrollOffset.current ? true : false;
+        scrollOffset.current = scrolledPosition;
         if (isAnimating.current === false) {
           if (down) {
-            if (event.contentOffset.y > headerHeight) {
-              setShowAnimatedContent(false);
+            if (scrolledPosition > headerBarHeight) {
               hideBottomTab(animationDuration);
               hideTopTab(animationDuration);
             }
@@ -193,6 +219,10 @@ export const FeedScreen = ({
     [scrollOffset],
   );
 
+  const navigateToAccountScreen = useCallback(() => {
+    navigation.navigate("MainStack", { screen: "Account" });
+  }, [navigation]);
+
   return (
     <>
       <TouchableWithoutFeedback
@@ -204,11 +234,14 @@ export const FeedScreen = ({
               })
             : null
         }>
-        <Animated.View style={[styles.header]}>
-          <View style={styles.headerChild}>
-            <ProfileButton />
+        <Animated.View style={[styles.headerBar]}>
+          <View style={styles.headerBarChild}>
+            <ProfileButton onPress={navigateToAccountScreen} />
           </View>
-          <View style={[styles.headerChild, { alignItems: "flex-end" }]}>
+          <View style={styles.headerBarTitle}>
+            <Text style={styles.headerBarText}>NearBye</Text>
+          </View>
+          <View style={[styles.headerBarChild, { alignItems: "flex-end" }]}>
             <SearchButton />
           </View>
         </Animated.View>
@@ -216,7 +249,7 @@ export const FeedScreen = ({
       <Screen style={styles.screen}>
         {showShimmer ? (
           <View>
-            <FeedHeader />
+            <FeedListHeader />
             <ShimmerCard />
             <ShimmerCard />
             <ShimmerCard />
@@ -230,10 +263,10 @@ export const FeedScreen = ({
               <RefreshControl
                 refreshing={loading}
                 onRefresh={onRefresh}
-                progressViewOffset={headerHeight}
+                progressViewOffset={headerBarHeight}
               />
             }
-            ListHeaderComponent={<FeedHeader style={styles.feedHeader} />}
+            ListHeaderComponent={<FeedListHeader style={styles.feedHeader} />}
             estimatedItemSize={250}
             onScroll={handleOnScroll}
           />

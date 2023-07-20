@@ -37,7 +37,7 @@ export const AccountScreen = ({
   }, [name]);
 
   return (
-    <Screen scroll>
+    <Screen scroll showBackButton>
       <View style={styles.container}>
         <View style={styles.profilePictureContainer}>
           {uploadingImage ? (

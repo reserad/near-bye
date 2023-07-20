@@ -1,6 +1,6 @@
 import { useNewDispatch } from "../../store/hooks/useNewDispatch";
 import { signOut } from "../../store/user/actions/signOut";
-import { BottomTabStackProps } from "../../navigation/types";
+import { MainStackProps } from "../../navigation/types";
 import { useCallback, useEffect, useState } from "react";
 import { useGetUser } from "../users/hooks/useGetUser";
 import { setUser } from "../../store/user/actions/setUser";
@@ -12,9 +12,7 @@ import {
   AccountScreenPayload,
 } from "./components/accountScreen";
 
-export const AccountContainer = ({
-  navigation,
-}: BottomTabStackProps<"Account">) => {
+export const AccountContainer = ({ navigation }: MainStackProps<"Account">) => {
   const dispatch = useNewDispatch();
   const [updatingUser, setUpdatingUser] = useState<boolean>(false);
   const [uploadingImage, setUploadingImage] = useState<boolean>(false);
