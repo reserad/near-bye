@@ -24,6 +24,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FeedListHeader } from "./feedListHeader";
 
 const headerBarHeight = Theme.padding.P15;
+const animationDuration = 300;
 
 interface RenderItem {
   item: Post;
@@ -50,15 +51,15 @@ export const FeedScreen = ({
   onShowImageModal,
   showShimmer,
 }: FeedScreenProps) => {
-  const insets = useSafeAreaInsets();
-  const scrollOffset = useRef(0);
-  const [showAnimatedContent, setShowAnimatedContent] = useState(true);
   const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
+  const [showAnimatedContent, setShowAnimatedContent] = useState(true);
+  const scrollOffset = useRef(0);
+  const isAnimating = useRef(false);
+  const scrollViewRef = useRef<FlashList<Post>>(null);
   const bottomSlideAnim = useRef(new Animated.Value(0)).current;
   const topSlideAnim = useRef(new Animated.Value(0)).current;
   const shrinkAnim = useRef(new Animated.Value(1)).current;
-  const isAnimating = useRef(false);
-  const scrollViewRef = useRef<FlashList<Post>>(null);
 
   const styles = StyleSheet.create({
     screen: {
@@ -112,7 +113,7 @@ export const FeedScreen = ({
     );
   }, []);
 
-  const hideBottomTab = (animationDuration: number) => {
+  const hideBottomTab = useCallback(() => {
     isAnimating.current = true;
 
     Animated.parallel(
@@ -143,9 +144,9 @@ export const FeedScreen = ({
         transform: [{ translateY: bottomSlideAnim }],
       },
     });
-  };
+  }, [shrinkAnim, bottomSlideAnim, navigation]);
 
-  const showBottomTab = (animationDuration: number) => {
+  const showBottomTab = useCallback(() => {
     isAnimating.current = true;
 
     Animated.parallel(
@@ -173,29 +174,28 @@ export const FeedScreen = ({
         transform: [{ translateY: bottomSlideAnim }],
       },
     });
-  };
+  }, [shrinkAnim, bottomSlideAnim, navigation]);
 
-  const hideTopTab = (animationDuration: number) => {
+  const hideTopTab = useCallback(() => {
     isAnimating.current = true;
     Animated.timing(topSlideAnim, {
       toValue: -1 * (headerBarHeight + insets.top),
       duration: animationDuration,
       useNativeDriver: true,
     }).start(() => (isAnimating.current = false));
-  };
+  }, [topSlideAnim, animationDuration, headerBarHeight, insets]);
 
-  const showTopTab = (animationDuration: number) => {
+  const showTopTab = useCallback(() => {
     isAnimating.current = true;
     Animated.timing(topSlideAnim, {
       toValue: 0,
       duration: animationDuration,
       useNativeDriver: true,
     }).start(() => (isAnimating.current = false));
-  };
+  }, [topSlideAnim, animationDuration]);
 
   const handleOnScroll = useCallback(
     (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const animationDuration = 300;
       const {
         contentOffset: { y: scrolledPosition },
       } = e.nativeEvent;
@@ -205,18 +205,18 @@ export const FeedScreen = ({
         if (isAnimating.current === false) {
           if (down) {
             if (scrolledPosition > headerBarHeight) {
-              hideBottomTab(animationDuration);
-              hideTopTab(animationDuration);
+              hideBottomTab();
+              hideTopTab();
             }
           } else {
             setShowAnimatedContent(true);
-            showBottomTab(animationDuration);
-            showTopTab(animationDuration);
+            showBottomTab();
+            showTopTab();
           }
         }
       }
     },
-    [scrollOffset],
+    [],
   );
 
   const navigateToAccountScreen = useCallback(() => {
