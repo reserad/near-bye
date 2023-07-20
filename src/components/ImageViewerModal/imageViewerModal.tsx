@@ -1,11 +1,14 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Dimensions,
   FlatList,
   StyleSheet,
+  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  ViewToken,
+  ViewabilityConfigCallbackPair,
 } from "react-native";
 import { Theme } from "../../shared/theme";
 import { MainStackProps } from "../../navigation/types";
@@ -34,49 +37,72 @@ export const ImageViewerModal = ({
 }: MainStackProps<"Media">) => {
   const { uris, startingIndex } = route.params;
   const flatList = useRef<FlatList>(null);
+  const [index, setIndex] = useState(() => startingIndex);
+
+  const onViewableItemsChanged = ({ changed }: { changed: ViewToken[] }) => {
+    if (changed && changed[0]) {
+      setIndex(changed[0].index);
+    }
+  };
+  const viewabilityConfigCallbackPairs = useRef<
+    ViewabilityConfigCallbackPair[]
+  >([
+    {
+      viewabilityConfig: { viewAreaCoveragePercentThreshold: 50 },
+      onViewableItemsChanged,
+    },
+  ]);
+
   return (
-    <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <View style={styles.header}>
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={() => navigation.goBack()}
           style={styles.close}>
           <MaterialCommunityIcons
-            name="close"
+            name="arrow-left"
             color={Theme.color.darkGray}
             size={28}
           />
         </TouchableOpacity>
-        <FlatList
-          ref={flatList}
-          data={uris}
-          renderItem={({ item }) => <ImageItem uri={item} />}
-          horizontal
-          snapToAlignment="start"
-          decelerationRate={"fast"}
-          snapToInterval={Dimensions.get("screen").width}
-          nestedScrollEnabled
-          showsHorizontalScrollIndicator={false}
-          keyExtractor={item => item}
-          initialScrollIndex={startingIndex}
-          contentContainerStyle={styles.listContainer}
-          onScrollToIndexFailed={info => {
-            const wait = new Promise(resolve => setTimeout(resolve, 500));
-            wait.then(() => {
-              flatList.current?.scrollToIndex({
-                index: info.index,
-                animated: true,
-              });
-            });
-          }}
-          getItemLayout={(_data, index) => ({
-            length: Dimensions.get("screen").width,
-            offset: Dimensions.get("screen").width * index,
-            index,
-          })}
-        />
+        <View style={styles.imagePositionCounter}>
+          <Text>
+            {index + 1} / {uris.length}
+          </Text>
+        </View>
       </View>
-    </TouchableWithoutFeedback>
+
+      <FlatList
+        ref={flatList}
+        data={uris}
+        renderItem={({ item }) => <ImageItem key={item} uri={item} />}
+        horizontal
+        snapToAlignment="start"
+        decelerationRate={"fast"}
+        snapToInterval={Dimensions.get("screen").width}
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={item => item}
+        initialScrollIndex={startingIndex}
+        contentContainerStyle={styles.listContainer}
+        viewabilityConfig={{ viewAreaCoveragePercentThreshold: 50 }}
+        viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
+        onScrollToIndexFailed={info => {
+          const wait = new Promise(resolve => setTimeout(resolve, 500));
+          wait.then(() => {
+            flatList.current?.scrollToIndex({
+              index: info.index,
+              animated: true,
+            });
+          });
+        }}
+        getItemLayout={(_data, index) => ({
+          length: Dimensions.get("screen").width,
+          offset: Dimensions.get("screen").width * index,
+          index,
+        })}
+      />
+    </View>
   );
 };
 
@@ -89,12 +115,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  close: {
+  header: {
     position: "absolute",
+    top: Theme.padding.P4,
+    left: Theme.padding.P4,
+    flexDirection: "row",
+    zIndex: 1,
+    elevation: 1,
+  },
+  close: {
     width: Theme.padding.P12,
     height: Theme.padding.P12,
-    top: Theme.padding.P4,
-    right: Theme.padding.P4,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  imagePositionCounter: {
+    height: Theme.padding.P12,
+    width: Theme.padding.P12,
     justifyContent: "center",
     alignItems: "center",
   },
