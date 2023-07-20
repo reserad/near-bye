@@ -4,7 +4,7 @@ import {
   NativeSyntheticEvent,
   RefreshControl,
   StyleSheet,
-  Text,
+  TouchableWithoutFeedback,
   View,
   ViewProps,
 } from "react-native";
@@ -17,6 +17,10 @@ import { ShimmerCard } from "./shimmerCard";
 import { Post } from "../../posts/types/post";
 import { FlashList } from "@shopify/flash-list";
 import { useNavigation } from "@react-navigation/native";
+import { ProfileButton } from "./profileButton";
+import { SearchButton } from "./searchButton";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { FeedHeader } from "./feedHeader";
 
 interface RenderItem {
   item: Post;
@@ -33,14 +37,6 @@ interface FeedScreenProps extends ViewProps {
   showShimmer: boolean;
 }
 
-const Header = () => {
-  return (
-    <View style={styles.header}>
-      <Text style={styles.headerText}>What's happening near you</Text>
-    </View>
-  );
-};
-
 export const FeedScreen = ({
   feed,
   onRefresh,
@@ -51,12 +47,48 @@ export const FeedScreen = ({
   onShowImageModal,
   showShimmer,
 }: FeedScreenProps) => {
+  const insets = useSafeAreaInsets();
   const scrollOffset = useRef(0);
-  const [showFAB, setShowFAB] = useState(true);
+  const [showAnimatedContent, setShowAnimatedContent] = useState(true);
   const navigation = useNavigation();
-  const slideAnim = useRef(new Animated.Value(0)).current;
+  const bottomSlideAnim = useRef(new Animated.Value(0)).current;
+  const topSlideAnim = useRef(new Animated.Value(0)).current;
   const shrinkAnim = useRef(new Animated.Value(1)).current;
   const isAnimating = useRef(false);
+  const headerHeight = Theme.padding.P15;
+  const scrollViewRef = useRef<FlashList<Post>>(null);
+
+  const styles = StyleSheet.create({
+    screen: {
+      flex: 1,
+      backgroundColor: Theme.color.lightGray,
+    },
+    animatedScreen: {
+      flex: 1,
+    },
+    header: {
+      height: headerHeight + insets.top,
+      paddingTop: insets.top,
+      paddingHorizontal: Theme.padding.P4,
+      justifyContent: "center",
+      flexDirection: "row",
+      position: "absolute",
+      left: 0,
+      right: 0,
+      zIndex: 1,
+      elevation: 1,
+      backgroundColor: Theme.color.white,
+      transform: [{ translateY: topSlideAnim }],
+      borderBottomWidth: 1,
+      borderColor: Theme.color.lighterGray,
+    },
+    headerChild: {
+      flex: 1,
+      justifyContent: "center",
+    },
+    feedHeader: { marginTop: headerHeight + insets.top },
+  });
+
   const renderCard = useCallback(({ item }: RenderItem) => {
     return (
       <PostCard
@@ -75,8 +107,8 @@ export const FeedScreen = ({
       toValue: 0,
       duration: animationDuration,
       useNativeDriver: true,
-    }).start(() => setShowFAB(false));
-    Animated.timing(slideAnim, {
+    }).start(() => setShowAnimatedContent(false));
+    Animated.timing(bottomSlideAnim, {
       toValue: 60,
       duration: animationDuration,
       useNativeDriver: true,
@@ -87,20 +119,19 @@ export const FeedScreen = ({
         bottom: 0,
         left: 0,
         right: 0,
-        transform: [{ translateY: slideAnim }],
+        transform: [{ translateY: bottomSlideAnim }],
       },
     });
   };
 
   const showBottomTab = (animationDuration: number) => {
-    setShowFAB(true);
     isAnimating.current = true;
     Animated.timing(shrinkAnim, {
       toValue: 1,
       duration: animationDuration,
       useNativeDriver: true,
     }).start();
-    Animated.timing(slideAnim, {
+    Animated.timing(bottomSlideAnim, {
       toValue: 0,
       duration: animationDuration,
       useNativeDriver: true,
@@ -111,9 +142,27 @@ export const FeedScreen = ({
         bottom: 0,
         left: 0,
         right: 0,
-        transform: [{ translateY: slideAnim }],
+        transform: [{ translateY: bottomSlideAnim }],
       },
     });
+  };
+
+  const hideTopTab = (animationDuration: number) => {
+    isAnimating.current = true;
+    Animated.timing(topSlideAnim, {
+      toValue: -1 * (headerHeight + insets.top),
+      duration: animationDuration,
+      useNativeDriver: true,
+    }).start(() => (isAnimating.current = false));
+  };
+
+  const showTopTab = (animationDuration: number) => {
+    isAnimating.current = true;
+    Animated.timing(topSlideAnim, {
+      toValue: 0,
+      duration: animationDuration,
+      useNativeDriver: true,
+    }).start(() => (isAnimating.current = false));
   };
 
   const handleOnScroll = useCallback(
@@ -128,9 +177,15 @@ export const FeedScreen = ({
         scrollOffset.current = event.contentOffset.y;
         if (isAnimating.current === false) {
           if (down) {
-            hideBottomTab(animationDuration);
+            if (event.contentOffset.y > headerHeight) {
+              setShowAnimatedContent(false);
+              hideBottomTab(animationDuration);
+              hideTopTab(animationDuration);
+            }
           } else {
+            setShowAnimatedContent(true);
             showBottomTab(animationDuration);
+            showTopTab(animationDuration);
           }
         }
       }
@@ -140,23 +195,45 @@ export const FeedScreen = ({
 
   return (
     <>
-      <Screen>
+      <TouchableWithoutFeedback
+        onPress={() =>
+          scrollViewRef.current
+            ? scrollViewRef.current.scrollToOffset({
+                animated: true,
+                offset: 0,
+              })
+            : null
+        }>
+        <Animated.View style={[styles.header]}>
+          <View style={styles.headerChild}>
+            <ProfileButton />
+          </View>
+          <View style={[styles.headerChild, { alignItems: "flex-end" }]}>
+            <SearchButton />
+          </View>
+        </Animated.View>
+      </TouchableWithoutFeedback>
+      <Screen style={styles.screen}>
         {showShimmer ? (
-          <View style={styles.shimmerContainer}>
-            <Header />
+          <View>
+            <FeedHeader />
             <ShimmerCard />
             <ShimmerCard />
             <ShimmerCard />
           </View>
         ) : (
           <FlashList
+            ref={scrollViewRef}
             data={feed}
             renderItem={renderCard}
-            contentContainerStyle={styles.list}
             refreshControl={
-              <RefreshControl refreshing={loading} onRefresh={onRefresh} />
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={onRefresh}
+                progressViewOffset={headerHeight}
+              />
             }
-            ListHeaderComponent={<Header />}
+            ListHeaderComponent={<FeedHeader style={styles.feedHeader} />}
             estimatedItemSize={250}
             onScroll={handleOnScroll}
           />
@@ -164,25 +241,10 @@ export const FeedScreen = ({
       </Screen>
       <FAB
         onPress={onFABPress}
-        visible={showFAB}
+        visible={showAnimatedContent}
         offset={{ y: Theme.padding.P10, x: 0 }}
         style={{ transform: [{ scale: shrinkAnim }] }}
       />
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  list: {
-    backgroundColor: Theme.color.lightGray,
-  },
-  shimmerContainer: {},
-  header: {
-    marginVertical: Theme.padding.P4,
-    height: Theme.padding.P12,
-    justifyContent: "center",
-  },
-  headerText: {
-    textAlign: "center",
-  },
-});
